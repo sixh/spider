@@ -18,6 +18,8 @@ public final class Const {
      * 以下为Dubbo使用的一些常量，
      * 全部引用dubbo的定义.
      */
+    public static final int DEFAULT_PAYLOAD = 8 * 1024 * 1024;
+    public static final String PAYLOAD_KEY = "payload";
     public static final String BACKUP_KEY = "backup";
     public static final String DEFAULT_KEY_PREFIX = "default.";
     public static final Pattern COMMA_SPLIT_PATTERN = Pattern

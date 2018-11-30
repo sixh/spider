@@ -6,18 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * All rights Reserved, Designed By HQYG
- * <pre>
- * Copyright:  Copyright(C) 2017
- * Company:    HQYG.
- * Author:     chenbin
- * CreateDate: 2018-02-02
- * </pre>
- * <p>
- * 默认的一个选择器;
- * </p>
- *
- * @author: chenbin
+ * @author chenbin
  */
 public class DefaultChooser extends AbstractChooser {
 

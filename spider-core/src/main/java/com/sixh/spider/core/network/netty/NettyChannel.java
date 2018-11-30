@@ -19,10 +19,20 @@ public class NettyChannel implements com.sixh.spider.core.network.Channel {
 
     private final Channel channel;
 
+    /**
+     * Instantiates a new Netty channel.
+     *
+     * @param channelHandlerContext the channel handler context
+     */
     public NettyChannel(ChannelHandlerContext channelHandlerContext) {
         channel = channelHandlerContext.channel();
     }
 
+    /**
+     * Instantiates a new Netty channel.
+     *
+     * @param channel the channel
+     */
     public NettyChannel(Channel channel) {
         this.channel = channel;
     }
@@ -48,10 +58,10 @@ public class NettyChannel implements com.sixh.spider.core.network.Channel {
     }
 
     public ChannelHandler close() {
-        return new NettyChannelHandler();
+        return new NettyChannelHandler(channel.close());
     }
 
     public ChannelHandler send(Object message) {
-        return null;
+        return new NettyChannelHandler(channel.writeAndFlush(message));
     }
 }

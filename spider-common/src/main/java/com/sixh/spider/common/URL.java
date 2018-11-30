@@ -1135,7 +1135,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getParameter(String, int)
-     * @deprecated Replace to <code>getParameter(String, int)</code>
+     * @deprecated Replace to <codec>getParameter(String, int)</codec>
      */
     @Deprecated
     public int getIntParameter(String key) {
@@ -1144,7 +1144,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getParameter(String, int)
-     * @deprecated Replace to <code>getParameter(String, int)</code>
+     * @deprecated Replace to <codec>getParameter(String, int)</codec>
      */
     @Deprecated
     public int getIntParameter(String key, int defaultValue) {
@@ -1153,7 +1153,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getPositiveParameter(String, int)
-     * @deprecated Replace to <code>getPositiveParameter(String, int)</code>
+     * @deprecated Replace to <codec>getPositiveParameter(String, int)</codec>
      */
     @Deprecated
     public int getPositiveIntParameter(String key, int defaultValue) {
@@ -1162,7 +1162,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getParameter(String, boolean)
-     * @deprecated Replace to <code>getParameter(String, boolean)</code>
+     * @deprecated Replace to <codec>getParameter(String, boolean)</codec>
      */
     @Deprecated
     public boolean getBooleanParameter(String key) {
@@ -1171,7 +1171,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getParameter(String, boolean)
-     * @deprecated Replace to <code>getParameter(String, boolean)</code>
+     * @deprecated Replace to <codec>getParameter(String, boolean)</codec>
      */
     @Deprecated
     public boolean getBooleanParameter(String key, boolean defaultValue) {
@@ -1180,7 +1180,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getMethodParameter(String, String, int)
-     * @deprecated Replace to <code>getMethodParameter(String, String, int)</code>
+     * @deprecated Replace to <codec>getMethodParameter(String, String, int)</codec>
      */
     @Deprecated
     public int getMethodIntParameter(String method, String key) {
@@ -1189,7 +1189,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getMethodParameter(String, String, int)
-     * @deprecated Replace to <code>getMethodParameter(String, String, int)</code>
+     * @deprecated Replace to <codec>getMethodParameter(String, String, int)</codec>
      */
     @Deprecated
     public int getMethodIntParameter(String method, String key, int defaultValue) {
@@ -1198,7 +1198,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getMethodPositiveParameter(String, String, int)
-     * @deprecated Replace to <code>getMethodPositiveParameter(String, String, int)</code>
+     * @deprecated Replace to <codec>getMethodPositiveParameter(String, String, int)</codec>
      */
     @Deprecated
     public int getMethodPositiveIntParameter(String method, String key, int defaultValue) {
@@ -1207,7 +1207,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getMethodParameter(String, String, boolean)
-     * @deprecated Replace to <code>getMethodParameter(String, String, boolean)</code>
+     * @deprecated Replace to <codec>getMethodParameter(String, String, boolean)</codec>
      */
     @Deprecated
     public boolean getMethodBooleanParameter(String method, String key) {
@@ -1216,7 +1216,7 @@ public final class URL implements Serializable {
 
     /**
      * @see #getMethodParameter(String, String, boolean)
-     * @deprecated Replace to <code>getMethodParameter(String, String, boolean)</code>
+     * @deprecated Replace to <codec>getMethodParameter(String, String, boolean)</codec>
      */
     @Deprecated
     public boolean getMethodBooleanParameter(String method, String key, boolean defaultValue) {

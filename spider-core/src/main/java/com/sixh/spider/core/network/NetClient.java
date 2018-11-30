@@ -29,5 +29,5 @@ public interface NetClient extends Transport{
     /**
      * disconnect.
      */
-    void disConeection();
+    void disConnection();
 }
