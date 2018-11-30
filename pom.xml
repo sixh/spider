@@ -7,6 +7,9 @@
     <modules>
         <module>spider-core</module>
         <module>spider-extensions</module>
+        <module>spider-dubbo</module>
+        <module>spider-http</module>
+        <module>spider-common</module>
     </modules>
     <groupId>com.sixh.spider</groupId>
     <artifactId>spider-parent</artifactId>
