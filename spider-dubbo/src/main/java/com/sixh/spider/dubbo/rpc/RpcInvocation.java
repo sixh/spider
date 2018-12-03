@@ -14,42 +14,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.core.network.aio;
+package com.sixh.spider.dubbo.rpc;
 
-import com.sixh.spider.core.network.AbstractNetClient;
-import com.sixh.spider.core.network.Channel;
-import com.sixh.spider.core.network.codec.CodecFactory;
+import lombok.Data;
+
+import java.util.Map;
 
 /**
- * AioClient.
+ * RpcInvocation.
  * <p>
+ * 引用dubbo#RpcInvocation
  * <p>
- * 18-11-30下午3:33
+ * 18-12-3下午3:13
  *
  * @author chenbin sixh
  */
-public class AioClient extends AbstractNetClient {
+@Data
+public class RpcInvocation {
+
+    private String methodName;
+
+    private Class<?>[] parameterTypes;
+
+    private Object[] arguments;
+
+    private Map<String, String> attachments;
+
     /**
-     * Instantiates a new Abstract net client.
+     * Gets attachment.
      *
-     * @param codec the codec
+     * @param key the key
+     * @return the attachment
      */
-    public AioClient(CodecFactory codec) {
-        super(codec);
+    public String getAttachment(String key) {
+        return attachments.get(key);
     }
 
-    @Override
-    protected Channel getChannel() {
-        return null;
-    }
-
-    @Override
-    protected void doOpen() {
-
-    }
-
-    @Override
-    protected void doConnection() {
-
+    /**
+     * Sets attachment.
+     *
+     * @param key   the key
+     * @param value the value
+     */
+    public void setAttachment(String key, String value) {
+        attachments.put(key, value);
     }
 }

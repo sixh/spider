@@ -23,6 +23,7 @@ import com.sixh.spider.core.network.codec.CodecFactory;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.epoll.EpollEventLoopGroup;
@@ -71,7 +72,7 @@ public class NettyClient extends AbstractNetClient {
         bootstrap.handler(new ChannelInitializer() {
             @Override
             protected void initChannel(io.netty.channel.Channel ch) {
-                for (Codec codec : codec().getCodecs()) {
+                for (Codec<ChannelHandler> codec : codec().getCodecs()) {
                     ch.pipeline().addLast(codec.name(), codec.codec());
                 }
             }
@@ -81,8 +82,8 @@ public class NettyClient extends AbstractNetClient {
     @Override
     protected void doConnection() {
         ChannelFuture connect = bootstrap.connect(getAddress());
-        if (connect.isSuccess()) {
+//        if (connect.isDone()) {
             channel = connect.channel();
-        }
+//        }
     }
 }

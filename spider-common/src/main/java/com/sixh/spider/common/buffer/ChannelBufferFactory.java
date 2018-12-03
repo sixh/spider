@@ -14,39 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.dubbo;
+package com.sixh.spider.common.buffer;
 
-import com.sixh.spider.core.network.codec.Codec;
-import com.sixh.spider.core.network.codec.CodecFactory;
+import java.nio.ByteBuffer;
 
-import java.util.ArrayList;
-import java.util.List;
+public interface ChannelBufferFactory {
 
-/**
- * DubboCodecFactory.
- * <p>
- * <p>
- * 18-11-30下午4:47
- *
- * @author chenbin sixh
- */
-public class DubboCodecFactory implements CodecFactory {
+    ChannelBuffer getBuffer(int capacity);
 
-    @Override
-    public List<Codec> getCodecs() {
-        List<Codec> list = new ArrayList<>();
-        list.add(new Codec() {
-            @Override
-            public String name() {
-                return "encode";
-            }
+    ChannelBuffer getBuffer(byte[] array, int offset, int length);
 
-            @Override
-            public <T> T codec() {
-                return null;
-            }
-        });
+    ChannelBuffer getBuffer(ByteBuffer nioBuffer);
 
-        return null;
-    }
 }

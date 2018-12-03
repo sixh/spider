@@ -14,42 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.core.network.aio;
+package com.sixh.spider.dubbo.netty;
 
-import com.sixh.spider.core.network.AbstractNetClient;
-import com.sixh.spider.core.network.Channel;
-import com.sixh.spider.core.network.codec.CodecFactory;
+import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelHandler;
 
 /**
- * AioClient.
+ * NettyServerHandler.
  * <p>
+ * netty handler.
  * <p>
- * 18-11-30下午3:33
+ * 18-12-3下午3:41
  *
  * @author chenbin sixh
  */
-public class AioClient extends AbstractNetClient {
-    /**
-     * Instantiates a new Abstract net client.
-     *
-     * @param codec the codec
-     */
-    public AioClient(CodecFactory codec) {
-        super(codec);
-    }
+@ChannelHandler.Sharable
+public class NettyServerHandler extends ChannelDuplexHandler {
 
-    @Override
-    protected Channel getChannel() {
-        return null;
-    }
-
-    @Override
-    protected void doOpen() {
-
-    }
-
-    @Override
-    protected void doConnection() {
-
-    }
 }

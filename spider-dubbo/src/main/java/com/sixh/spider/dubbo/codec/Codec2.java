@@ -16,9 +16,13 @@
  */
 package com.sixh.spider.dubbo.codec;
 
+import com.sixh.spider.common.Const;
+import com.sixh.spider.common.buffer.ChannelBuffer;
+import com.sixh.spider.core.network.Channel;
 import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * Codec2.
@@ -30,5 +34,56 @@ import java.io.IOException;
  * @author chenbin sixh
  */
 public interface Codec2 {
-    void encode(Channel var1, ByteBuf var2, Object var3) throws IOException;
+
+    /**
+     * Encode.
+     *
+     * @param channel the channel
+     * @param byteBuf the byte buf
+     * @param message the message
+     * @throws IOException the io exception
+     */
+    void encode(Channel channel, ChannelBuffer byteBuf, Object message) throws IOException;
+
+    /**
+     * Decode.
+     *
+     * @param channel the channel
+     * @param byteBuf the byte buf
+     * @return the object
+     * @throws IOException the io exception
+     */
+    Object decode(Channel channel, ChannelBuffer byteBuf) throws IOException;
+
+    /**
+     * Check payload.
+     *
+     * @param channel the channel
+     * @param size    the size
+     * @throws IOException the io exception
+     */
+    default void checkPayload(Channel channel, long size) throws IOException {
+      /*  int payload = Const.DEFAULT_PAYLOAD;
+        if (channel != null && channel.getUrl() != null) {
+            payload = channel.getUrl().getParameter(Const.PAYLOAD_KEY, Const.DEFAULT_PAYLOAD);
+        }
+        if (payload > 0 && size > payload) {
+            ExceedPayloadLimitException e = new ExceedPayloadLimitException("Data length too large: " + size + ", max payload: " + payload + ", channel: " + channel);
+            logger.error(e);
+            throw e;
+        }*/
+    }
+    /**
+     * The enum Decode result.
+     */
+    enum DecodeResult {
+        /**
+         * Need more input decode result.
+         */
+        NEED_MORE_INPUT,
+        /**
+         * Skip some input decode result.
+         */
+        SKIP_SOME_INPUT
+    }
 }

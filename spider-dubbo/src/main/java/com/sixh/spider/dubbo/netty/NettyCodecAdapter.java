@@ -15,7 +15,10 @@
  * limitations under the License.
  */
 package com.sixh.spider.dubbo.netty;
+
 import com.sixh.spider.common.URL;
+import com.sixh.spider.core.network.netty.NettyChannel;
+import com.sixh.spider.dubbo.codec.Codec2;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -28,8 +31,10 @@ import java.util.List;
 
 /**
  * NettyCodecAdapter.
+ *
+ * @author chenbin six
  */
-final class NettyCodecAdapter {
+public final class NettyCodecAdapter {
 
     private final ChannelHandler encoder = new InternalEncoder();
 
@@ -59,13 +64,11 @@ final class NettyCodecAdapter {
 
         @Override
         protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
-             ChannelBuffer buffer = new NettyBackedChannelBuffer(out);
             Channel ch = ctx.channel();
-            NettyChannel channel = NettyChannel.getOrAddChannel(ch, url, handler);
             try {
-                codec.encode(channel, buffer, msg);
+                codec.encode(new NettyChannel(ch), new NettyBackedChannelBuffer(out), msg);
             } finally {
-                NettyChannel.removeChannelIfDisconnected(ch);
+//                NettyChannel.removeChannelIfDisconnected(ch);
             }
         }
     }
@@ -75,38 +78,33 @@ final class NettyCodecAdapter {
         @Override
         protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> out) throws Exception {
 
-            ChannelBuffer message = new NettyBackedChannelBuffer(input);
-
-            NettyChannel channel = NettyChannel.getOrAddChannel(ctx.channel(), url, handler);
-
+            NettyChannel channel = new NettyChannel(ctx.channel());
             Object msg;
-
             int saveReaderIndex;
-
             try {
                 // decode object.
                 do {
-                    saveReaderIndex = message.readerIndex();
+                    saveReaderIndex = input.readerIndex();
                     try {
-                        msg = codec.decode(channel, message);
+                        msg = codec.decode(channel, new NettyBackedChannelBuffer(input));
                     } catch (IOException e) {
                         throw e;
                     }
                     if (msg == Codec2.DecodeResult.NEED_MORE_INPUT) {
-                        message.readerIndex(saveReaderIndex);
+                        input.readerIndex(saveReaderIndex);
                         break;
                     } else {
                         //is it possible to go here ?
-                        if (saveReaderIndex == message.readerIndex()) {
+                        if (saveReaderIndex == input.readerIndex()) {
                             throw new IOException("Decode without read data.");
                         }
                         if (msg != null) {
                             out.add(msg);
                         }
                     }
-                } while (message.readable());
+                } while (input.isReadable());
             } finally {
-                NettyChannel.removeChannelIfDisconnected(ctx.channel());
+//                NettyChannel.removeChannelIfDisconnected(ctx.channel());
             }
         }
     }

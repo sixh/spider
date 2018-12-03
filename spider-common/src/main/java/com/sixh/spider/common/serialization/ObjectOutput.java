@@ -14,42 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.core.network.aio;
+package com.sixh.spider.common.serialization;
 
-import com.sixh.spider.core.network.AbstractNetClient;
-import com.sixh.spider.core.network.Channel;
-import com.sixh.spider.core.network.codec.CodecFactory;
+import java.io.IOException;
 
 /**
- * AioClient.
- * <p>
- * <p>
- * 18-11-30下午3:33
- *
- * @author chenbin sixh
+ * Object output.
  */
-public class AioClient extends AbstractNetClient {
+public interface ObjectOutput extends DataOutput {
+
     /**
-     * Instantiates a new Abstract net client.
+     * write object.
      *
-     * @param codec the codec
+     * @param obj object.
      */
-    public AioClient(CodecFactory codec) {
-        super(codec);
-    }
+    void writeObject(Object obj) throws IOException;
 
-    @Override
-    protected Channel getChannel() {
-        return null;
-    }
-
-    @Override
-    protected void doOpen() {
-
-    }
-
-    @Override
-    protected void doConnection() {
-
-    }
 }

@@ -50,4 +50,5 @@ public final class Const {
     public static final String CONFIGURATORS_CATEGORY = "configurators";
     public static final String ROUTERS_CATEGORY = "routers";
     public static final String REMOVE_VALUE_PREFIX = "-";
+    public static final String PATH_KEY = "path";
 }

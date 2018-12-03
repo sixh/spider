@@ -14,30 +14,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.core.network.codec;
+package com.sixh.spider.common.serialization;
+
+import com.sixh.spider.common.URL;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
- * Codec.
- * <p>
- * 消息协议编解码定义.
- * <p>
- * 18-11-30下午3:29
- *
- * @author chenbin sixh
+ * Serialization. (SPI, Singleton, ThreadSafe)
  */
-public interface Codec<T> {
+public interface Serialization {
 
     /**
-     * Name string.
+     * get content type id
      *
-     * @return the string
+     * @return content type id
      */
-    String name();
+    byte getContentTypeId();
 
     /**
-     * Codec t.
+     * get content type
      *
-     * @return the t
+     * @return content type
      */
-     T codec();
+    String getContentType();
+
+    /**
+     * create serializer
+     *
+     * @param url
+     * @param output
+     * @return serializer
+     * @throws IOException
+     */
+    ObjectOutput serialize(URL url, OutputStream output) throws IOException;
+
+    /**
+     * create deserializer
+     *
+     * @param url
+     * @param input
+     * @return deserializer
+     * @throws IOException
+     */
+    ObjectInput deserialize(URL url, InputStream input) throws IOException;
+
 }

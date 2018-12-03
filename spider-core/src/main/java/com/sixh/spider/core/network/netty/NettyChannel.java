@@ -37,30 +37,37 @@ public class NettyChannel implements com.sixh.spider.core.network.Channel {
         this.channel = channel;
     }
 
+    @Override
     public SocketAddress remoteAddress() {
         return channel.remoteAddress();
     }
 
+    @Override
     public SocketAddress localAddress() {
         return channel.localAddress();
     }
 
+    @Override
     public boolean isConnected() {
         return channel.isActive();
     }
 
+    @Override
     public boolean isOpened() {
         return channel.isOpen();
     }
 
+    @Override
     public boolean isClose() {
         return !isOpened();
     }
 
+    @Override
     public ChannelHandler close() {
         return new NettyChannelHandler(channel.close());
     }
 
+    @Override
     public ChannelHandler send(Object message) {
         return new NettyChannelHandler(channel.writeAndFlush(message));
     }

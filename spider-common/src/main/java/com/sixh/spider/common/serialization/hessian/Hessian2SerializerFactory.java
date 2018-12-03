@@ -14,42 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.core.network.aio;
+package com.sixh.spider.common.serialization.hessian;
 
-import com.sixh.spider.core.network.AbstractNetClient;
-import com.sixh.spider.core.network.Channel;
-import com.sixh.spider.core.network.codec.CodecFactory;
+import com.alibaba.com.caucho.hessian.io.SerializerFactory;
 
-/**
- * AioClient.
- * <p>
- * <p>
- * 18-11-30下午3:33
- *
- * @author chenbin sixh
- */
-public class AioClient extends AbstractNetClient {
-    /**
-     * Instantiates a new Abstract net client.
-     *
-     * @param codec the codec
-     */
-    public AioClient(CodecFactory codec) {
-        super(codec);
+public class Hessian2SerializerFactory extends SerializerFactory {
+
+    public static final SerializerFactory SERIALIZER_FACTORY = new Hessian2SerializerFactory();
+
+    private Hessian2SerializerFactory() {
     }
 
     @Override
-    protected Channel getChannel() {
-        return null;
+    public ClassLoader getClassLoader() {
+        return Thread.currentThread().getContextClassLoader();
     }
 
-    @Override
-    protected void doOpen() {
-
-    }
-
-    @Override
-    protected void doConnection() {
-
-    }
 }

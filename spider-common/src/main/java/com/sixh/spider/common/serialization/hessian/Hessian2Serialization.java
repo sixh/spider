@@ -14,42 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.core.network.aio;
+package com.sixh.spider.common.serialization.hessian;
 
-import com.sixh.spider.core.network.AbstractNetClient;
-import com.sixh.spider.core.network.Channel;
-import com.sixh.spider.core.network.codec.CodecFactory;
+import com.sixh.spider.common.URL;
+import com.sixh.spider.common.serialization.ObjectInput;
+import com.sixh.spider.common.serialization.ObjectOutput;
+import com.sixh.spider.common.serialization.Serialization;
 
-/**
- * AioClient.
- * <p>
- * <p>
- * 18-11-30下午3:33
- *
- * @author chenbin sixh
- */
-public class AioClient extends AbstractNetClient {
-    /**
-     * Instantiates a new Abstract net client.
-     *
-     * @param codec the codec
-     */
-    public AioClient(CodecFactory codec) {
-        super(codec);
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class Hessian2Serialization implements Serialization {
+
+    public static final byte ID = 2;
+
+    @Override
+    public byte getContentTypeId() {
+        return ID;
     }
 
     @Override
-    protected Channel getChannel() {
-        return null;
+    public String getContentType() {
+        return "x-application/hessian2";
     }
 
     @Override
-    protected void doOpen() {
-
+    public ObjectOutput serialize(URL url, OutputStream out) throws IOException {
+        return new Hessian2ObjectOutput(out);
     }
 
     @Override
-    protected void doConnection() {
-
+    public ObjectInput deserialize(URL url, InputStream is) throws IOException {
+        return new Hessian2ObjectInput(is);
     }
+
 }

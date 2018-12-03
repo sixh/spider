@@ -16,6 +16,14 @@
  */
 package com.sixh.spider.dubbo;
 
+import com.sixh.spider.core.network.netty.NettyClient;
+import com.sixh.spider.dubbo.netty.DubboCodecFactory;
+import com.sixh.spider.dubbo.rpc.Request;
+import com.sixh.spider.dubbo.rpc.RpcInvocation;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Main.
  * <p>
@@ -26,6 +34,34 @@ package com.sixh.spider.dubbo;
  */
 public class Main {
     public static void main(String[] args) {
-
+        NettyClient client = new NettyClient(new DubboCodecFactory());
+        client.setAddress("192.168.1.139");
+        client.setPort(20881);
+        Request request = new Request();
+        request.setBroken(false);
+        request.setTwoWay(true);
+        request.setVersion("2.0.2");
+        RpcInvocation invocation = new RpcInvocation();
+        invocation.setMethodName("$invoke");
+        Class<?>[] parameterTypes = {String.class, String[].class, Object[].class};
+        invocation.setParameterTypes(parameterTypes);
+        Map<String,Object> values = new HashMap<>();
+        values.put("volume",1);
+        values.put("orderNo","123333");
+        Object[] arguments = {"sellOut","com.proxy.default",values};
+        invocation.setArguments(arguments);
+        Map<String,String> attrachments = new HashMap<>();
+        attrachments.put("path","com.calvin.order.api.service.OnlineOrderService");
+        attrachments.put("id","１");
+        attrachments.put("interface","com.calvin.order.api.service.OnlineOrderService");
+        attrachments.put("version","1.0.0");
+        attrachments.put("generic","true");
+        attrachments.put("timeout","3000");
+        invocation.setAttachments(attrachments);
+        request.setData(invocation);
+        request.setHeartbeat(false);
+        client.open();
+        client.connection();
+        client.send(request);
     }
 }

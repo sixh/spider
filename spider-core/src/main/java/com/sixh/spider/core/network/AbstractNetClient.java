@@ -112,7 +112,7 @@ public abstract class AbstractNetClient implements NetClient {
      * @return boolean boolean
      */
     public boolean usableness() {
-        return getChannel().isConnected() && getChannel().isOpened();
+        return getChannel().isOpened();
     }
 
     /**
