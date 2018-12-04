@@ -48,6 +48,11 @@ public class Main {
         Map<String,Object> values = new HashMap<>();
         values.put("volume",1);
         values.put("orderNo","123333");
+        values.put("source","WEB");
+        values.put("price",1.25);
+        values.put("mainCoinSymbol","USDT");
+        values.put("otherCoinSymbol","LOOM");
+//        values.put("orderNo","123333");
         String [] arg1 = {"com.proxy.default"};
         Object [] arg2 = {values};
         Object[] arguments = {"sellOut",arg1,arg2};
