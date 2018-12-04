@@ -18,6 +18,7 @@ package com.sixh.spider.dubbo.netty;
 
 import com.sixh.spider.common.URL;
 import com.sixh.spider.core.network.netty.NettyChannel;
+import com.sixh.spider.dubbo.DubboChannel;
 import com.sixh.spider.dubbo.codec.Codec2;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -45,10 +46,13 @@ public final class NettyCodecAdapter {
     private final URL url;
 
     private final ChannelHandler handler;
+    //
 
     public NettyCodecAdapter(Codec2 codec, URL url, ChannelHandler handler) {
         this.codec = codec;
+
         this.url = url;
+
         this.handler = handler;
     }
 
@@ -66,7 +70,7 @@ public final class NettyCodecAdapter {
         protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
             Channel ch = ctx.channel();
             try {
-                codec.encode(new NettyChannel(ch), new NettyBackedChannelBuffer(out), msg);
+                codec.encode(new DubboChannel(new NettyChannel(ch), url), new NettyBackedChannelBuffer(out), msg);
             } finally {
 //                NettyChannel.removeChannelIfDisconnected(ch);
             }
@@ -86,7 +90,7 @@ public final class NettyCodecAdapter {
                 do {
                     saveReaderIndex = input.readerIndex();
                     try {
-                        msg = codec.decode(channel, new NettyBackedChannelBuffer(input));
+                        msg = codec.decode(new DubboChannel(channel, url), new NettyBackedChannelBuffer(input));
                     } catch (IOException e) {
                         throw e;
                     }

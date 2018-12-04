@@ -16,6 +16,7 @@
  */
 package com.sixh.spider.dubbo.netty;
 
+import com.sixh.spider.common.URL;
 import com.sixh.spider.core.network.codec.Codec;
 import com.sixh.spider.core.network.codec.CodecFactory;
 import com.sixh.spider.dubbo.codec.DubboCodec;
@@ -32,12 +33,13 @@ import java.util.List;
  *
  * @author chenbin sixh
  */
-public class DubboCodecFactory implements CodecFactory{
+public class DubboCodecFactory implements CodecFactory {
 
     @Override
     public List<Codec> getCodecs() {
         List<Codec> list = new ArrayList<>();
-        NettyCodecAdapter adapter = new NettyCodecAdapter(new DubboCodec(), null, null);
+        URL url = URL.valueOf("dubbo://192.168.1.139:20881/com.calvin.order.api.service.OnlineOrderService?anyhost=true&application=order-provider&bind.ip=192.168.1.139&bind.port=20881&channel.readonly.sent=true&codec=dubbo&dubbo=2.0.2&generic=false&heartbeat=60000&interface=com.calvin.order.api.service.OnlineOrderService&methods=$getOnlineOrderProposeList,$cancelOrder,$sellOut,$buyIn,$generateOrderNo&pid=23151&qos.enable=false&revision=1.0.0&server=netty4&side=provider&timestamp=1543911427507&version=1.0.0");
+        NettyCodecAdapter adapter = new NettyCodecAdapter(new DubboCodec(), url, null);
         list.add(new Codec<ChannelHandler>() {
             @Override
             public String name() {
@@ -68,7 +70,7 @@ public class DubboCodecFactory implements CodecFactory{
 
             @Override
             public ChannelHandler codec() {
-                return new NettyServerHandler();
+                return new NettyClientHandler(url, null);
             }
         });
         return list;

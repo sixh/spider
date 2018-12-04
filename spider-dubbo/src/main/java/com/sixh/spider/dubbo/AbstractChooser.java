@@ -5,6 +5,9 @@ import com.sixh.spider.core.context.RequestContext;
 
 import java.util.List;
 
+/**
+ * @author p
+ */
 public abstract class AbstractChooser implements ChooserFactory {
 
     static int calculateWarmupWeight(int uptime, int warmup, int weight) {

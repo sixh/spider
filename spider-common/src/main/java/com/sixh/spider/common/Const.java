@@ -51,4 +51,7 @@ public final class Const {
     public static final String ROUTERS_CATEGORY = "routers";
     public static final String REMOVE_VALUE_PREFIX = "-";
     public static final String PATH_KEY = "path";
+    public static final String DECODE_IN_IO_THREAD_KEY = "decode.in.io";
+    public static final boolean DEFAULT_DECODE_IN_IO_THREAD = true;
+
 }

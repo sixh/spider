@@ -16,13 +16,10 @@
  */
 package com.sixh.spider.dubbo.codec;
 
-import com.sixh.spider.common.Const;
 import com.sixh.spider.common.buffer.ChannelBuffer;
-import com.sixh.spider.core.network.Channel;
-import io.netty.buffer.ByteBuf;
+import com.sixh.spider.dubbo.DubboChannel;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 /**
  * Codec2.
@@ -43,7 +40,7 @@ public interface Codec2 {
      * @param message the message
      * @throws IOException the io exception
      */
-    void encode(Channel channel, ChannelBuffer byteBuf, Object message) throws IOException;
+    void encode(DubboChannel channel, ChannelBuffer byteBuf, Object message) throws IOException;
 
     /**
      * Decode.
@@ -53,7 +50,7 @@ public interface Codec2 {
      * @return the object
      * @throws IOException the io exception
      */
-    Object decode(Channel channel, ChannelBuffer byteBuf) throws IOException;
+    Object decode(DubboChannel channel, ChannelBuffer byteBuf) throws IOException;
 
     /**
      * Check payload.
@@ -62,7 +59,7 @@ public interface Codec2 {
      * @param size    the size
      * @throws IOException the io exception
      */
-    default void checkPayload(Channel channel, long size) throws IOException {
+    default void checkPayload(DubboChannel channel, long size) throws IOException {
       /*  int payload = Const.DEFAULT_PAYLOAD;
         if (channel != null && channel.getUrl() != null) {
             payload = channel.getUrl().getParameter(Const.PAYLOAD_KEY, Const.DEFAULT_PAYLOAD);

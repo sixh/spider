@@ -48,7 +48,9 @@ public class Main {
         Map<String,Object> values = new HashMap<>();
         values.put("volume",1);
         values.put("orderNo","123333");
-        Object[] arguments = {"sellOut","com.proxy.default",values};
+        String [] arg1 = {"com.proxy.default"};
+        Object [] arg2 = {values};
+        Object[] arguments = {"sellOut",arg1,arg2};
         invocation.setArguments(arguments);
         Map<String,String> attrachments = new HashMap<>();
         attrachments.put("path","com.calvin.order.api.service.OnlineOrderService");

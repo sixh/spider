@@ -29,6 +29,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * NettyClient.
  * <p>
@@ -72,7 +74,9 @@ public class NettyClient extends AbstractNetClient {
         bootstrap.handler(new ChannelInitializer() {
             @Override
             protected void initChannel(io.netty.channel.Channel ch) {
+
                 for (Codec<ChannelHandler> codec : codec().getCodecs()) {
+                    System.out.println("初始化到这里了.............."+codec.name());
                     ch.pipeline().addLast(codec.name(), codec.codec());
                 }
             }
@@ -81,9 +85,12 @@ public class NettyClient extends AbstractNetClient {
 
     @Override
     protected void doConnection() {
-        ChannelFuture connect = bootstrap.connect(getAddress());
-//        if (connect.isDone()) {
-            channel = connect.channel();
+        ChannelFuture future = bootstrap.connect(getAddress());
+        //        if (connect.isDone()) {
+        boolean ret = future.awaitUninterruptibly(3000, TimeUnit.MILLISECONDS);
+        if(ret && future.isSuccess()) {
+            channel = future.channel();
+        }
 //        }
     }
 }

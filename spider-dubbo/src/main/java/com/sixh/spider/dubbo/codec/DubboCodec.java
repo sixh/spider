@@ -26,7 +26,8 @@ import com.sixh.spider.common.serialization.Serialization;
 import com.sixh.spider.common.serialization.hessian.Hessian2Serialization;
 import com.sixh.spider.common.utils.Bytes;
 import com.sixh.spider.common.utils.ReflectUtils;
-import com.sixh.spider.core.network.Channel;
+import com.sixh.spider.dubbo.DubboChannel;
+import com.sixh.spider.dubbo.rpc.DecodeableRpcResult;
 import com.sixh.spider.dubbo.rpc.Request;
 import com.sixh.spider.dubbo.rpc.Response;
 import com.sixh.spider.dubbo.rpc.RpcInvocation;
@@ -85,33 +86,29 @@ public class DubboCodec implements Codec2 {
     /**
      * The constant EMPTY_OBJECT_ARRAY.
      */
-    public static final String NAME = "dubbo";
-    public static final String DUBBO_VERSION = "2.6.4";
     public static final byte RESPONSE_WITH_EXCEPTION = 0;
     public static final byte RESPONSE_VALUE = 1;
     public static final byte RESPONSE_NULL_VALUE = 2;
     public static final byte RESPONSE_WITH_EXCEPTION_WITH_ATTACHMENTS = 3;
     public static final byte RESPONSE_VALUE_WITH_ATTACHMENTS = 4;
     public static final byte RESPONSE_NULL_VALUE_WITH_ATTACHMENTS = 5;
-    public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
-    public static final Class<?>[] EMPTY_CLASS_ARRAY = new Class<?>[0];
 
     @Override
-    public void encode(Channel channel, ChannelBuffer byteBuf, Object message) throws IOException {
+    public void encode(DubboChannel channel, ChannelBuffer byteBuf, Object message) throws IOException {
         if (message instanceof Request) {
             encodeRequest(channel, byteBuf, (Request) message);
         }
     }
 
     @Override
-    public Object decode(Channel channel, ChannelBuffer buffer) throws IOException {
+    public Object decode(DubboChannel channel, ChannelBuffer buffer) throws IOException {
         int readable = buffer.readableBytes();
         byte[] header = new byte[Math.min(readable, HEADER_LENGTH)];
         buffer.readBytes(header);
         return decode(channel, buffer, readable, header);
     }
 
-    private Object decode(Channel channel, ChannelBuffer buffer, int readable, byte[] header) throws IOException {
+    private Object decode(DubboChannel channel, ChannelBuffer buffer, int readable, byte[] header) throws IOException {
         // check magic number.
         if (readable > 0 && header[0] == MAGIC_HIGH
                 || readable > 1 && header[1] == MAGIC_LOW) {
@@ -160,7 +157,7 @@ public class DubboCodec implements Codec2 {
      * @return the object
      * @throws IOException the io exception
      */
-    protected Object decodeBody(Channel channel, InputStream is, byte[] header) throws IOException {
+    protected Object decodeBody(DubboChannel channel, InputStream is, byte[] header) throws IOException {
         byte flag = header[2], proto = (byte) (flag & SERIALIZATION_MASK);
         // get request id.
         long id = Bytes.bytes2long(header, 4);
@@ -183,8 +180,18 @@ public class DubboCodec implements Codec2 {
                     } else if (res.isEvent()) {
                         data = in.readObject();
                     } else {
-                        byte[] bytes = readMessageData(is);
-                        data = bytes;
+                        DecodeableRpcResult result;
+                        if (channel.getUrl().getParameter(
+                                Const.DECODE_IN_IO_THREAD_KEY,
+                                Const.DEFAULT_DECODE_IN_IO_THREAD)) {
+                            result = new DecodeableRpcResult(channel, res, is, null, proto);
+                            result.decode();
+                        } else {
+                            result = new DecodeableRpcResult(channel, res,
+                                    is,
+                                    null, proto);
+                        }
+                        data = result;
                     }
                     res.setResult(data);
                 } else {
@@ -212,12 +219,19 @@ public class DubboCodec implements Codec2 {
     }
 
 
-    private void encodeRequest(Channel channel, ChannelBuffer buffer, Request req) throws IOException {
+    private void encodeRequest(DubboChannel channel, ChannelBuffer buffer, Request req) throws IOException {
         Serialization serialization = new Hessian2Serialization();
+
         //header;
         byte[] header = new byte[HEADER_LENGTH];
         //0:MAGIC_HIGH 1: MAGIC_LOW
+
+        //:0---7:magic high
+        //:8---15: magic low
         Bytes.short2bytes(MAGIC, header, 0);
+
+
+        //16: ([req&res]&twoawy&event)
         //2:FLAG_REQUEST
         int flagReq = FLAG_REQUEST | serialization.getContentTypeId();
         if (req.isTwoWay()) {
@@ -227,8 +241,11 @@ public class DubboCodec implements Codec2 {
             flagReq |= FLAG_EVENT;
         }
         header[2] = (byte) flagReq;
+
+        //3:null空闲
         // set request id.
         Bytes.long2bytes(req.getId(), header, 4);
+
         // encode request data.
         int savedWriteIndex = buffer.writerIndex();
         buffer.writerIndex(savedWriteIndex + HEADER_LENGTH);
@@ -261,7 +278,7 @@ public class DubboCodec implements Codec2 {
      * @param version the version
      * @throws IOException the io exception
      */
-    protected void encodeRequestData(Channel channel, ObjectOutput out, Object data, String version) throws IOException {
+    protected void encodeRequestData(DubboChannel channel, ObjectOutput out, Object data, String version) throws IOException {
         RpcInvocation inv = (RpcInvocation) data;
         out.writeUTF(version);
         out.writeUTF(inv.getAttachment(Const.PATH_KEY));
@@ -269,11 +286,12 @@ public class DubboCodec implements Codec2 {
         out.writeUTF(inv.getMethodName());
         out.writeUTF(ReflectUtils.getDesc(inv.getParameterTypes()));
         Object[] args = inv.getArguments();
-      /*  if (args != null) {
-            for (int i = 0; i < args.length; i++) {
-                out.writeObject(encodeInvocationArgument(channel, inv, i));
+        if (args != null) {
+            for (Object arg : args) {
+                out.writeObject(arg);
             }
-        }*/
+        }
         out.writeObject(inv.getAttachments());
     }
+
 }
