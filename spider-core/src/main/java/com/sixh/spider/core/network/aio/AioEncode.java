@@ -14,49 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.dubbo;
+package com.sixh.spider.core.network.aio;
 
-import com.sixh.spider.common.URL;
 import com.sixh.spider.core.network.MChannel;
 
+import java.nio.ByteBuffer;
+
 /**
- * DubboChannel.
+ * AioEncode.
  * <p>
- *     dubbo相关的通道;
  * <p>
- * 18-12-4下午5:02
+ * 18-12-5下午4:46
  *
  * @author chenbin sixh
  */
-public class DubboChannel {
-    /**
-     * 网络通道;
-     */
-    private MChannel channel;
+public interface AioEncode {
 
     /**
-     * 网络注册地址;
+     * Encode.
+     *
+     * @param channel the channel
+     * @param object  the object
+     * @param buffer  the buffer
      */
-    private URL url;
-
-    public DubboChannel(MChannel channel, URL url) {
-        this.channel = channel;
-        this.url = url;
-    }
-
-    public MChannel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(MChannel channel) {
-        this.channel = channel;
-    }
-
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(URL url) {
-        this.url = url;
-    }
+    void encode(MChannel channel, Object object, ByteBuffer buffer);
 }

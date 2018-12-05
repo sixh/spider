@@ -27,6 +27,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
+/**
+ * @author p
+ */
 public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     private ByteBuf buffer;
@@ -47,7 +50,6 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
         return new NettyBackedChannelBuffer(buffer.copy(index, length));
     }
 
-    //has nothing use
     @Override
     public ChannelBufferFactory factory() {
         return null;

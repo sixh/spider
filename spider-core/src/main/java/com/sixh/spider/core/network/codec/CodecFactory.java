@@ -28,10 +28,11 @@ import java.util.List;
  * @author chenbin sixh
  */
 public interface CodecFactory {
+
     /**
      * 返回一个codec处理器.
      *
      * @return t [ ]
      */
-    List<Codec> getCodecs();
+    List<CodecHandler> getCodecs();
 }

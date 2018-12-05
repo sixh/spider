@@ -17,8 +17,13 @@
 package com.sixh.spider.core.network.aio;
 
 import com.sixh.spider.core.network.AbstractNetClient;
-import com.sixh.spider.core.network.Channel;
+import com.sixh.spider.core.network.MChannel;
 import com.sixh.spider.core.network.codec.CodecFactory;
+
+import java.io.IOException;
+import java.net.StandardSocketOptions;
+import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
 
 /**
  * AioClient.
@@ -29,6 +34,9 @@ import com.sixh.spider.core.network.codec.CodecFactory;
  * @author chenbin sixh
  */
 public class AioClient extends AbstractNetClient {
+
+    private AsynchronousSocketChannel client;
+
     /**
      * Instantiates a new Abstract net client.
      *
@@ -39,17 +47,38 @@ public class AioClient extends AbstractNetClient {
     }
 
     @Override
-    protected Channel getChannel() {
-        return null;
+    protected MChannel getChannel() {
+        return new AioChannel(client);
     }
 
     @Override
     protected void doOpen() {
-
+        try {
+            client = AsynchronousSocketChannel.open();
+            client.setOption(StandardSocketOptions.TCP_NODELAY, true);
+            client.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
+            client.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void doConnection() {
+        try {
+            client.connect(getAddress(), null, new CompletionHandler<Void, Object>() {
+                @Override
+                public void completed(Void result, Object attachment) {
+                    System.out.println("连接成功!");
+                }
 
+                @Override
+                public void failed(Throwable exc, Object attachment) {
+                    System.out.println("连接失败!");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -5,7 +5,8 @@ package com.sixh.spider.core.network;
  * CreateDate: 2017/1/17 9:29
  * @author : chenbin
  */
-public interface Future {
+@SuppressWarnings("all")
+public interface MFuture {
     /**
      * 是否发送数据成功.
      * @return true 是，false 否
@@ -22,5 +23,5 @@ public interface Future {
      * 获取当前通道.
      * @return channel
      */
-    Channel getChannel();
+    MChannel getChannel();
 }

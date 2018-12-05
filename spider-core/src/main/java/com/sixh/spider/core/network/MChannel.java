@@ -3,7 +3,7 @@ package com.sixh.spider.core.network;
 import java.net.SocketAddress;
 
 /**
- * Channel.
+ * MChannel.
  * <p>
  * network channel A unified definition.
  * <p>
@@ -11,7 +11,8 @@ import java.net.SocketAddress;
  *
  * @author chenbin sixh
  */
-public interface Channel extends Transport{
+@SuppressWarnings("all")
+public interface MChannel extends Transport{
 
     /**
      * SocketAddress.
@@ -53,5 +54,5 @@ public interface Channel extends Transport{
      *
      * @return the channel handler
      */
-    ChannelHandler close();
+    MFuture close();
 }

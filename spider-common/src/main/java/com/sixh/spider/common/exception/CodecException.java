@@ -14,49 +14,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.dubbo;
+package com.sixh.spider.common.exception;
 
-import com.sixh.spider.common.URL;
-import com.sixh.spider.core.network.MChannel;
+import java.io.IOException;
 
 /**
- * DubboChannel.
+ * CodecException.
  * <p>
- *     dubbo相关的通道;
+ * 对于通讯编解码相关的异常信息.
  * <p>
- * 18-12-4下午5:02
+ * 18-12-5下午2:51
  *
  * @author chenbin sixh
  */
-public class DubboChannel {
-    /**
-     * 网络通道;
-     */
-    private MChannel channel;
+public class CodecException extends IOException {
+
+    private static final long serialVersionUID = 1L;
 
     /**
-     * 网络注册地址;
+     * Instantiates a new Codec exception.
      */
-    private URL url;
-
-    public DubboChannel(MChannel channel, URL url) {
-        this.channel = channel;
-        this.url = url;
+    public CodecException() {
     }
 
-    public MChannel getChannel() {
-        return channel;
+    /**
+     * Instantiates a new Codec exception.
+     *
+     * @param message the message
+     */
+    public CodecException(String message) {
+        super(message);
     }
 
-    public void setChannel(MChannel channel) {
-        this.channel = channel;
+    /**
+     * Instantiates a new Codec exception.
+     *
+     * @param message the message
+     * @param cause   the cause
+     */
+    public CodecException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(URL url) {
-        this.url = url;
+    /**
+     * Instantiates a new Codec exception.
+     *
+     * @param cause the cause
+     */
+    public CodecException(Throwable cause) {
+        super(cause);
     }
 }

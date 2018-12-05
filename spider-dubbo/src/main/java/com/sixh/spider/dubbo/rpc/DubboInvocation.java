@@ -16,7 +16,7 @@
  */
 package com.sixh.spider.dubbo.rpc;
 
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.Map;
 
@@ -29,16 +29,66 @@ import java.util.Map;
  *
  * @author chenbin sixh
  */
-@Data
-public class RpcInvocation {
+@Getter
+public class DubboInvocation {
 
     private String methodName;
 
     private Class<?>[] parameterTypes;
-
+    /**
+     * 属
+     */
     private Object[] arguments;
 
+    /**
+     * 属性值.
+     */
     private Map<String, String> attachments;
+
+
+    /**
+     * Sets arguments.
+     *
+     * @param arguments the arguments
+     * @return the arguments
+     */
+    public DubboInvocation setArguments(Object[] arguments) {
+        this.arguments = arguments;
+        return this;
+    }
+
+    /**
+     * Sets method name.
+     *
+     * @param methodName the method name
+     * @return the method name
+     */
+    public DubboInvocation setMethodName(String methodName) {
+        this.methodName = methodName;
+        return this;
+    }
+
+    /**
+     * Sets parameter types.
+     *
+     * @param parameterTypes the parameter types
+     * @return the parameter types
+     */
+    public DubboInvocation setParameterTypes(Class<?>[] parameterTypes) {
+        this.parameterTypes = parameterTypes;
+        return this;
+    }
+
+    /**
+     * Sets attachments.
+     *
+     * @param attachments the attachments
+     * @return the attachments
+     */
+    public DubboInvocation setAttachments(Map<String, String> attachments) {
+        this.attachments = attachments;
+        return this;
+    }
 
     /**
      * Gets attachment.
@@ -55,8 +105,10 @@ public class RpcInvocation {
      *
      * @param key   the key
      * @param value the value
+     * @return the dubbo invocation
      */
-    public void setAttachment(String key, String value) {
+    public DubboInvocation putAttachment(String key, String value) {
         attachments.put(key, value);
+        return this;
     }
 }

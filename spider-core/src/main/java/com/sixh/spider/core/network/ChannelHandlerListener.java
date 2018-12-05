@@ -14,5 +14,5 @@ public interface ChannelHandlerListener extends EventListener {
      * @param future 通道结果信息
      * @throws Exception exception;
      */
-    void operationComplete(Future future) throws Exception;
+    void operationComplete(MFuture future) throws Exception;
 }

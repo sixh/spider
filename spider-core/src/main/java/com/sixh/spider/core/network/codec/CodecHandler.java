@@ -17,7 +17,7 @@
 package com.sixh.spider.core.network.codec;
 
 /**
- * Codec.
+ * CodecHandler.
  * <p>
  * 消息协议编解码定义.
  * <p>
@@ -25,7 +25,7 @@ package com.sixh.spider.core.network.codec;
  *
  * @author chenbin sixh
  */
-public interface Codec<T> {
+public interface CodecHandler<T> {
 
     /**
      * Name string.
@@ -35,7 +35,7 @@ public interface Codec<T> {
     String name();
 
     /**
-     * Codec t.
+     * CodecHandler t.
      *
      * @return the t
      */

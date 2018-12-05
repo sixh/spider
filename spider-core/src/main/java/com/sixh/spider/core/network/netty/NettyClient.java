@@ -17,8 +17,8 @@
 package com.sixh.spider.core.network.netty;
 
 import com.sixh.spider.core.network.AbstractNetClient;
-import com.sixh.spider.core.network.Channel;
-import com.sixh.spider.core.network.codec.Codec;
+import com.sixh.spider.core.network.MChannel;
+import com.sixh.spider.core.network.codec.CodecHandler;
 import com.sixh.spider.core.network.codec.CodecFactory;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBufAllocator;
@@ -58,7 +58,7 @@ public class NettyClient extends AbstractNetClient {
     }
 
     @Override
-    protected Channel getChannel() {
+    protected MChannel getChannel() {
         return new NettyChannel(channel);
     }
 
@@ -75,7 +75,7 @@ public class NettyClient extends AbstractNetClient {
             @Override
             protected void initChannel(io.netty.channel.Channel ch) {
 
-                for (Codec<ChannelHandler> codec : codec().getCodecs()) {
+                for (CodecHandler<ChannelHandler> codec : codec().getCodecs()) {
                     System.out.println("初始化到这里了.............."+codec.name());
                     ch.pipeline().addLast(codec.name(), codec.codec());
                 }

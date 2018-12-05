@@ -16,41 +16,114 @@
  */
 package com.sixh.spider.dubbo.rpc;
 
-import lombok.Data;
-
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * DubboResult.
  * <p>
+ * dubbo返回结果集.
  * <p>
  * 18-12-4下午6:50
  *
  * @author chenbin sixh
  */
-@Data
 public class DubboResult {
 
-    protected Map<String, String> attachments = new HashMap<String, String>();
+    private Map<String, String> attachments = new HashMap<>();
 
-    protected Object result;
+    private Object result;
 
-    protected Throwable exception;
+    private Throwable exception;
 
+    /**
+     * Instantiates a new Dubbo result.
+     */
     public DubboResult() {
 
     }
 
-    public DubboResult(Object result) {
+    /**
+     * Instantiates a new Dubbo result.
+     *
+     * @param result the result
+     */
+    DubboResult(Object result) {
         this.result = result;
     }
 
+    /**
+     * Sets value.
+     *
+     * @param value the value
+     */
     public void setValue(Object value) {
         this.result = value;
     }
 
+    /**
+     * Get value object.
+     *
+     * @return the object
+     */
+    public Object getValue() {
+        return result;
+    }
+
+    /**
+     * Gets attachments.
+     *
+     * @return the attachments
+     */
+    public Map<String, String> getAttachments() {
+        return attachments;
+    }
+
+    /**
+     * Sets attachments.
+     *
+     * @param attachments the attachments
+     * @return the attachments
+     */
+    public DubboResult setAttachments(Map<String, String> attachments) {
+        this.attachments = attachments;
+        return this;
+    }
+
+    /**
+     * Gets exception.
+     *
+     * @return the exception
+     */
+    public Throwable getException() {
+        return exception;
+    }
+
+    /**
+     * Sets exception.
+     *
+     * @param exception the exception
+     * @return the exception
+     */
+    public DubboResult setException(Throwable exception) {
+        this.exception = exception;
+        return this;
+    }
+    /**
+     * 生成一个空的对象.
+     *
+     * @return dubboResult. dubbo result
+     */
     public static DubboResult empty() {
         return new DubboResult();
+    }
+
+    @Override
+    public String toString() {
+        return "DubboResult{" +
+                "attachments=" + attachments +
+                ", result=" + result +
+                ", exception=" + exception +
+                '}';
     }
 }

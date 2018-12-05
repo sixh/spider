@@ -17,6 +17,7 @@
 package com.sixh.spider.dubbo.netty;
 
 import com.sixh.spider.common.URL;
+import com.sixh.spider.core.network.MChannelHandler;
 import com.sixh.spider.core.network.netty.NettyChannel;
 import com.sixh.spider.dubbo.DubboChannel;
 import com.sixh.spider.dubbo.codec.Codec2;
@@ -36,30 +37,38 @@ import java.util.List;
  * @author chenbin six
  */
 public final class NettyCodecAdapter {
-
     private final ChannelHandler encoder = new InternalEncoder();
-
     private final ChannelHandler decoder = new InternalDecoder();
-
     private final Codec2 codec;
-
     private final URL url;
-
-    private final ChannelHandler handler;
-    //
-
-    public NettyCodecAdapter(Codec2 codec, URL url, ChannelHandler handler) {
+    private final MChannelHandler handler;
+    /**
+     * Instantiates a new Netty codec adapter.
+     *
+     * @param codec   the codec
+     * @param url     the url
+     * @param handler the handler
+     */
+    public NettyCodecAdapter(Codec2 codec, URL url, MChannelHandler handler) {
         this.codec = codec;
-
         this.url = url;
-
         this.handler = handler;
     }
 
+    /**
+     * Gets encoder.
+     *
+     * @return the encoder
+     */
     public ChannelHandler getEncoder() {
         return encoder;
     }
 
+    /**
+     * Gets decoder.
+     *
+     * @return the decoder
+     */
     public ChannelHandler getDecoder() {
         return decoder;
     }

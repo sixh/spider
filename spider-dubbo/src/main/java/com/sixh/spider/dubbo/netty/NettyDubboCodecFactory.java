@@ -17,7 +17,7 @@
 package com.sixh.spider.dubbo.netty;
 
 import com.sixh.spider.common.URL;
-import com.sixh.spider.core.network.codec.Codec;
+import com.sixh.spider.core.network.codec.CodecHandler;
 import com.sixh.spider.core.network.codec.CodecFactory;
 import com.sixh.spider.dubbo.codec.DubboCodec;
 import io.netty.channel.ChannelHandler;
@@ -26,21 +26,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DubboCodecFactory.
+ * NettyDubboCodecFactory.
  * <p>
  * <p>
  * 18-11-30下午4:47
  *
  * @author chenbin sixh
  */
-public class DubboCodecFactory implements CodecFactory {
+public class NettyDubboCodecFactory implements CodecFactory {
 
     @Override
-    public List<Codec> getCodecs() {
-        List<Codec> list = new ArrayList<>();
+    public List<CodecHandler> getCodecs() {
+        List<CodecHandler> list = new ArrayList<>();
         URL url = URL.valueOf("dubbo://192.168.1.139:20881/com.calvin.order.api.service.OnlineOrderService?anyhost=true&application=order-provider&bind.ip=192.168.1.139&bind.port=20881&channel.readonly.sent=true&codec=dubbo&dubbo=2.0.2&generic=false&heartbeat=60000&interface=com.calvin.order.api.service.OnlineOrderService&methods=$getOnlineOrderProposeList,$cancelOrder,$sellOut,$buyIn,$generateOrderNo&pid=23151&qos.enable=false&revision=1.0.0&server=netty4&side=provider&timestamp=1543911427507&version=1.0.0");
         NettyCodecAdapter adapter = new NettyCodecAdapter(new DubboCodec(), url, null);
-        list.add(new Codec<ChannelHandler>() {
+        list.add(new CodecHandler<ChannelHandler>() {
             @Override
             public String name() {
                 return "encode";
@@ -51,7 +51,7 @@ public class DubboCodecFactory implements CodecFactory {
                 return adapter.getEncoder();
             }
         });
-        list.add(new Codec<ChannelHandler>() {
+        list.add(new CodecHandler<ChannelHandler>() {
             @Override
             public String name() {
                 return "decode";
@@ -62,7 +62,7 @@ public class DubboCodecFactory implements CodecFactory {
                 return adapter.getDecoder();
             }
         });
-        list.add(new Codec<ChannelHandler>() {
+        list.add(new CodecHandler<ChannelHandler>() {
             @Override
             public String name() {
                 return "handler";

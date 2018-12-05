@@ -14,17 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.core.network.codec;
+package com.sixh.spider.core.network.aio;
+
+import com.sixh.spider.core.network.MChannel;
+import com.sixh.spider.core.network.MFuture;
 
 /**
- * CodecParse.
+ * AioFuture.
  * <p>
- * 消息协议转换器定义.
  * <p>
- * 18-11-30下午3:31
+ * 18-12-5下午4:01
  *
  * @author chenbin sixh
  */
-public interface CodecParse {
+public class AioFuture implements MFuture {
+    @Override
+    public boolean isSuccessfully() {
+        return false;
+    }
 
+    @Override
+    public Throwable cause() {
+        return null;
+    }
+
+    @Override
+    public MChannel getChannel() {
+        return null;
+    }
 }

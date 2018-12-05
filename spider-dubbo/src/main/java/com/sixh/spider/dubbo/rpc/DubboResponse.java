@@ -18,11 +18,11 @@ package com.sixh.spider.dubbo.rpc;
 
 /**
  * 引用dubbo
- * Response
+ * DubboResponse
  *
  * @author p
  */
-public class Response {
+public class DubboResponse {
 
     public static final String HEARTBEAT_EVENT = null;
 
@@ -95,14 +95,14 @@ public class Response {
 
     private Object mResult;
 
-    public Response() {
+    public DubboResponse() {
     }
 
-    public Response(long id) {
+    public DubboResponse(long id) {
         mId = id;
     }
 
-    public Response(long id, String version) {
+    public DubboResponse(long id, String version) {
         mId = id;
         mVersion = version;
     }
@@ -169,7 +169,7 @@ public class Response {
 
     @Override
     public String toString() {
-        return "Response [id=" + mId + ", version=" + mVersion + ", status=" + mStatus + ", event=" + mEvent
+        return "DubboResponse [id=" + mId + ", version=" + mVersion + ", status=" + mStatus + ", event=" + mEvent
                 + ", error=" + mErrorMsg + ", result=" + (mResult == this ? "this" : mResult) + "]";
     }
 }

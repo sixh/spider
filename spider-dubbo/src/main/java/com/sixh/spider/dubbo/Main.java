@@ -17,9 +17,9 @@
 package com.sixh.spider.dubbo;
 
 import com.sixh.spider.core.network.netty.NettyClient;
-import com.sixh.spider.dubbo.netty.DubboCodecFactory;
-import com.sixh.spider.dubbo.rpc.Request;
-import com.sixh.spider.dubbo.rpc.RpcInvocation;
+import com.sixh.spider.dubbo.netty.NettyDubboCodecFactory;
+import com.sixh.spider.dubbo.rpc.DubboInvocation;
+import com.sixh.spider.dubbo.rpc.DubboRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +34,14 @@ import java.util.Map;
  */
 public class Main {
     public static void main(String[] args) {
-        NettyClient client = new NettyClient(new DubboCodecFactory());
+        NettyClient client = new NettyClient(new NettyDubboCodecFactory());
         client.setAddress("192.168.1.139");
         client.setPort(20881);
-        Request request = new Request();
+        DubboRequest request = new DubboRequest();
         request.setBroken(false);
         request.setTwoWay(true);
         request.setVersion("2.0.2");
-        RpcInvocation invocation = new RpcInvocation();
+        DubboInvocation invocation = new DubboInvocation();
         invocation.setMethodName("$invoke");
         Class<?>[] parameterTypes = {String.class, String[].class, Object[].class};
         invocation.setParameterTypes(parameterTypes);

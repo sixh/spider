@@ -21,13 +21,16 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 引用dubbo．
- * Request.
+ * DubboRequest.
+ *
+ * @author p
  */
-public class Request {
+public class DubboRequest {
 
+    /**
+     * The constant HEARTBEAT_EVENT.
+     */
     public static final String HEARTBEAT_EVENT = null;
-
-    public static final String READONLY_EVENT = "R";
 
     private static final AtomicLong INVOKE_ID = new AtomicLong(0);
 
@@ -43,69 +46,131 @@ public class Request {
 
     private Object mData;
 
-    public Request() {
+    /**
+     * Instantiates a new DubboRequest.
+     */
+    public DubboRequest() {
         mId = newId();
     }
 
-    public Request(long id) {
-        mId = id;
-    }
-
     private static long newId() {
-        // getAndIncrement() When it grows to MAX_VALUE, it will grow to MIN_VALUE, and the negative can be used as ID
-        return INVOKE_ID.getAndIncrement();
+        return INVOKE_ID.incrementAndGet();
     }
 
-
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public long getId() {
         return mId;
     }
 
+    /**
+     * Gets version.
+     *
+     * @return the version
+     */
     public String getVersion() {
         return mVersion;
     }
 
+    /**
+     * Sets version.
+     *
+     * @param version the version
+     */
     public void setVersion(String version) {
         mVersion = version;
     }
 
+    /**
+     * Is two way boolean.
+     *
+     * @return the boolean
+     */
     public boolean isTwoWay() {
         return mTwoWay;
     }
 
+    /**
+     * Sets two way.
+     *
+     * @param twoWay the two way
+     */
     public void setTwoWay(boolean twoWay) {
         mTwoWay = twoWay;
     }
 
+    /**
+     * Is event boolean.
+     *
+     * @return the boolean
+     */
     public boolean isEvent() {
         return mEvent;
     }
 
+    /**
+     * Sets event.
+     *
+     * @param event the event
+     */
     public void setEvent(String event) {
         mEvent = true;
         mData = event;
     }
 
+    /**
+     * Is broken boolean.
+     *
+     * @return the boolean
+     */
     public boolean isBroken() {
         return mBroken;
     }
 
+    /**
+     * Sets broken.
+     *
+     * @param mBroken the m broken
+     */
     public void setBroken(boolean mBroken) {
         this.mBroken = mBroken;
     }
 
+    /**
+     * Gets data.
+     *
+     * @return the data
+     */
     public Object getData() {
         return mData;
     }
 
+    /**
+     * Sets data.
+     *
+     * @param msg the msg
+     */
     public void setData(Object msg) {
         mData = msg;
     }
 
+    /**
+     * Is heartbeat boolean.
+     *
+     * @return the boolean
+     */
     public boolean isHeartbeat() {
         return mEvent && HEARTBEAT_EVENT == mData;
     }
 
+    /**
+     * Sets heartbeat.
+     *
+     * @param isHeartbeat the is heartbeat
+     */
     public void setHeartbeat(boolean isHeartbeat) {
         if (isHeartbeat) {
             setEvent(HEARTBEAT_EVENT);
@@ -114,7 +179,7 @@ public class Request {
 
     @Override
     public String toString() {
-        return "Request{" +
+        return "DubboRequest{" +
                 "mId=" + mId +
                 ", mVersion='" + mVersion + '\'' +
                 ", mTwoWay=" + mTwoWay +

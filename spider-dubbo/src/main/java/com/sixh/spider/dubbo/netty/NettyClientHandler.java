@@ -17,6 +17,7 @@
 package com.sixh.spider.dubbo.netty;
 
 import com.sixh.spider.common.URL;
+import com.sixh.spider.core.network.MChannelHandler;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,9 +37,9 @@ public class NettyClientHandler extends ChannelDuplexHandler {
 
     private final URL url;
 
-    private final ChannelHandler handler;
+    private final MChannelHandler handler;
 
-    public NettyClientHandler(URL url, ChannelHandler handler) {
+    public NettyClientHandler(URL url, MChannelHandler handler) {
         if (url == null) {
             throw new IllegalArgumentException("url == null");
         }
@@ -89,7 +90,7 @@ public class NettyClientHandler extends ChannelDuplexHandler {
       /*  NettyChannel channel = NettyChannel.getOrAddChannel(ctx.channel(), url, handler);
         try {
             handler.sent(channel, msg);
-        } finally {
+        } finally {l
             ettyChannel.removeChannelIfDisconnected(ctx.channel());
         }
         */

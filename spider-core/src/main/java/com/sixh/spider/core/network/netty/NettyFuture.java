@@ -14,49 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.dubbo;
+package com.sixh.spider.core.network.netty;
 
-import com.sixh.spider.common.URL;
 import com.sixh.spider.core.network.MChannel;
+import com.sixh.spider.core.network.MFuture;
+import io.netty.channel.ChannelFuture;
 
 /**
- * DubboChannel.
+ * NettyFuture.
  * <p>
- *     dubbo相关的通道;
  * <p>
- * 18-12-4下午5:02
+ * 18-12-5下午4:01
  *
  * @author chenbin sixh
  */
-public class DubboChannel {
-    /**
-     * 网络通道;
-     */
-    private MChannel channel;
+public class NettyFuture implements MFuture {
 
-    /**
-     * 网络注册地址;
-     */
-    private URL url;
+    private ChannelFuture future;
 
-    public DubboChannel(MChannel channel, URL url) {
-        this.channel = channel;
-        this.url = url;
+    public NettyFuture(ChannelFuture future) {
+        this.future = future;
     }
 
+    @Override
+    public boolean isSuccessfully() {
+        return future.isSuccess();
+    }
+
+    @Override
+    public Throwable cause() {
+        return future.cause();
+    }
+
+    @Override
     public MChannel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(MChannel channel) {
-        this.channel = channel;
-    }
-
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(URL url) {
-        this.url = url;
+        return new NettyChannel(future.channel());
     }
 }

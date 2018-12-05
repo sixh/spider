@@ -21,29 +21,39 @@ import java.lang.reflect.Type;
 
 /**
  * Object input.
+ * @author p
  */
 public interface ObjectInput extends DataInput {
 
     /**
      * read object.
      *
-     * @return object.
+     * @return object. object
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
      */
     Object readObject() throws IOException, ClassNotFoundException;
 
     /**
      * read object.
      *
+     * @param <T> the type parameter
      * @param cls object type.
-     * @return object.
+     * @return object. t
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
      */
     <T> T readObject(Class<T> cls) throws IOException, ClassNotFoundException;
 
     /**
      * read object.
      *
-     * @param cls object type.
-     * @return object.
+     * @param <T>  the type parameter
+     * @param cls  object type.
+     * @param type the type
+     * @return object. t
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
      */
     <T> T readObject(Class<T> cls, Type type) throws IOException, ClassNotFoundException;
 

@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ResponseType.
+ * ResponseBody.
  * <p>
  * 返回数据的类型;
  * <p>
@@ -35,10 +35,10 @@ import java.util.Map;
  *
  * @author chenbin sixh
  */
-public enum ResponseType {
+public enum ResponseBody {
 
     /**
-     * Response with exception response type.
+     * DubboResponse with exception response type.
      */
     RESPONSE_WITH_EXCEPTION(0) {
         @Override
@@ -46,7 +46,7 @@ public enum ResponseType {
             try {
                 Object obj = in.readObject();
                 if (!(obj instanceof Throwable)) {
-                    throw new IOException("Response data error, expect Throwable, but get " + obj);
+                    throw new IOException("DubboResponse data error, expect Throwable, but get " + obj);
                 }
                 DubboResult result = new DubboResult();
                 result.setException((Throwable) obj);
@@ -58,7 +58,7 @@ public enum ResponseType {
         }
     },
     /**
-     * Response value response type.
+     * DubboResponse value response type.
      */
     RESPONSE_VALUE(1) {
         @Override
@@ -72,7 +72,7 @@ public enum ResponseType {
         }
     },
     /**
-     * Response null value response type.
+     * DubboResponse null value response type.
      */
     RESPONSE_NULL_VALUE(2) {
         @Override
@@ -81,7 +81,7 @@ public enum ResponseType {
         }
     },
     /**
-     * Response with exception with attachments response type.
+     * DubboResponse with exception with attachments response type.
      */
     RESPONSE_WITH_EXCEPTION_WITH_ATTACHMENTS(3) {
         @Override
@@ -89,11 +89,11 @@ public enum ResponseType {
             try {
                 Object obj = in.readObject();
                 if (!(obj instanceof Throwable)) {
-                    throw new IOException("Response data error, expect Throwable, but get " + obj);
+                    throw new IOException("DubboResponse data error, expect Throwable, but get " + obj);
                 }
                 DubboResult result = new DubboResult();
                 result.setException((Throwable) obj);
-                result.setAttachments((Map<String, String>) in.readObject(Map.class));
+                result.setAttachments(in.readObject(Map.class));
                 return result;
             } catch (ClassNotFoundException e) {
                 LOGGER.error("Read response data failed.", e);
@@ -102,14 +102,14 @@ public enum ResponseType {
         }
     },
     /**
-     * Response value with attachments response type.
+     * DubboResponse value with attachments response type.
      */
     RESPONSE_VALUE_WITH_ATTACHMENTS(4) {
         @Override
         public DubboResult decode(ObjectInput in) throws IOException {
             try {
                 DubboResult result = new DubboResult();
-                result.setAttachments((Map<String, String>) in.readObject(Map.class));
+                result.setAttachments(in.readObject(Map.class));
                 return result;
             } catch (ClassNotFoundException e) {
                 LOGGER.error("Read response data failed.", e);
@@ -118,14 +118,14 @@ public enum ResponseType {
         }
     },
     /**
-     * Response null value with attachments response type.
+     * DubboResponse null value with attachments response type.
      */
     RESPONSE_NULL_VALUE_WITH_ATTACHMENTS(5) {
         @Override
         public DubboResult decode(ObjectInput in) throws IOException {
             try {
                 DubboResult result = new DubboResult();
-                result.setAttachments((Map<String, String>) in.readObject(Map.class));
+                result.setAttachments(in.readObject(Map.class));
                 return result;
             } catch (ClassNotFoundException e) {
                 LOGGER.error("Read response data failed.", e);
@@ -134,34 +134,36 @@ public enum ResponseType {
         }
     };
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResponseType.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResponseBody.class);
 
     private byte type;
 
-    private static final Map<Byte, ResponseType> valueMap = new HashMap<>();
+    private static final Map<Byte, ResponseBody> VALUE_MAP = new HashMap<>();
 
     static {
-        valueMap.put(RESPONSE_WITH_EXCEPTION.getType(), RESPONSE_VALUE);
-        valueMap.put(RESPONSE_VALUE.getType(), RESPONSE_VALUE);
-        valueMap.put(RESPONSE_NULL_VALUE.getType(), RESPONSE_VALUE);
-        valueMap.put(RESPONSE_WITH_EXCEPTION_WITH_ATTACHMENTS.getType(), RESPONSE_VALUE);
-        valueMap.put(RESPONSE_VALUE_WITH_ATTACHMENTS.getType(), RESPONSE_VALUE);
-        valueMap.put(RESPONSE_NULL_VALUE_WITH_ATTACHMENTS.getType(), RESPONSE_VALUE);
+        VALUE_MAP.put(RESPONSE_WITH_EXCEPTION.getType(), RESPONSE_VALUE);
+        VALUE_MAP.put(RESPONSE_VALUE.getType(), RESPONSE_VALUE);
+        VALUE_MAP.put(RESPONSE_NULL_VALUE.getType(), RESPONSE_VALUE);
+        VALUE_MAP.put(RESPONSE_WITH_EXCEPTION_WITH_ATTACHMENTS.getType(), RESPONSE_VALUE);
+        VALUE_MAP.put(RESPONSE_VALUE_WITH_ATTACHMENTS.getType(), RESPONSE_VALUE);
+        VALUE_MAP.put(RESPONSE_NULL_VALUE_WITH_ATTACHMENTS.getType(), RESPONSE_VALUE);
     }
 
     /**
      * 对response解码.
      *
      * @param in 数据流.
-     * @return 对象.
+     * @return 对象. dubbo result
+     * @throws IOException the io exception
      */
     abstract DubboResult decode(ObjectInput in) throws IOException;
 
     /**
      * 对response解码.
      *
-     * @param is   is;
-     * @return 数据.
+     * @param is is;
+     * @return 数据. dubbo result
+     * @throws IOException the io exception
      */
     public static DubboResult decode(InputStream is) throws IOException {
         if (is == null) {
@@ -170,14 +172,23 @@ public enum ResponseType {
         ObjectInput in = new Hessian2Serialization()
                 .deserialize(null, is);
         byte flag = in.readByte();
-        return valueMap.get(flag).decode(in);
+        ResponseBody body = VALUE_MAP.get(flag);
+        if (body != null) {
+            return VALUE_MAP.get(flag).decode(in);
+        } else {
+            return DubboResult.empty();
+        }
     }
 
-
-    ResponseType(int type) {
+    ResponseBody(int type) {
         this.type = (byte) type;
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public byte getType() {
         return type;
     }}

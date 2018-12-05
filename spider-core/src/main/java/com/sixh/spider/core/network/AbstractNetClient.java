@@ -88,7 +88,7 @@ public abstract class AbstractNetClient implements NetClient {
     }
 
     /**
-     * Codec codec factory.
+     * CodecHandler codec factory.
      *
      * @return the codec factory
      */
@@ -97,7 +97,7 @@ public abstract class AbstractNetClient implements NetClient {
     }
 
     @Override
-    public ChannelHandler send(Object message) {
+    public MFuture send(Object message) {
         if (message != null) {
             if (usableness()) {
                 return getChannel().send(message);
@@ -125,11 +125,11 @@ public abstract class AbstractNetClient implements NetClient {
     }
 
     /**
-     * Gets Channel.
+     * Gets MChannel.
      *
-     * @return Channel Channel
+     * @return MChannel MChannel
      */
-    protected abstract Channel getChannel();
+    protected abstract MChannel getChannel();
 
     /**
      * Do open.

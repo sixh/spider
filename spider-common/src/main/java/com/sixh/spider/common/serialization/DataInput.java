@@ -26,8 +26,8 @@ public interface DataInput {
     /**
      * Read boolean.
      *
-     * @return boolean.
-     * @throws IOException
+     * @return boolean. boolean
+     * @throws IOException the io exception
      */
     boolean readBool() throws IOException;
 
@@ -35,55 +35,55 @@ public interface DataInput {
      * Read byte.
      *
      * @return byte value.
-     * @throws IOException
+     * @throws IOException the io exception
      */
     byte readByte() throws IOException;
 
     /**
      * Read short integer.
      *
-     * @return short.
-     * @throws IOException
+     * @return short. short
+     * @throws IOException the io exception
      */
     short readShort() throws IOException;
 
     /**
      * Read integer.
      *
-     * @return integer.
-     * @throws IOException
+     * @return integer. int
+     * @throws IOException the io exception
      */
     int readInt() throws IOException;
 
     /**
      * Read long.
      *
-     * @return long.
-     * @throws IOException
+     * @return long. long
+     * @throws IOException the io exception
      */
     long readLong() throws IOException;
 
     /**
      * Read float.
      *
-     * @return float.
-     * @throws IOException
+     * @return float. float
+     * @throws IOException the io exception
      */
     float readFloat() throws IOException;
 
     /**
      * Read double.
      *
-     * @return double.
-     * @throws IOException
+     * @return double. double
+     * @throws IOException the io exception
      */
     double readDouble() throws IOException;
 
     /**
      * Read UTF-8 string.
      *
-     * @return string.
-     * @throws IOException
+     * @return string. string
+     * @throws IOException the io exception
      */
     String readUTF() throws IOException;
 
@@ -91,7 +91,7 @@ public interface DataInput {
      * Read byte array.
      *
      * @return byte array.
-     * @throws IOException
+     * @throws IOException the io exception
      */
     byte[] readBytes() throws IOException;
 }

@@ -1,6 +1,8 @@
 package com.sixh.spider.core.network.netty;
 
-import com.sixh.spider.core.network.ChannelHandler;
+import com.sixh.spider.core.network.MChannelHandler;
+import com.sixh.spider.core.network.MChannel;
+import com.sixh.spider.core.network.MFuture;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -15,7 +17,7 @@ import java.net.SocketAddress;
  *
  * @author chenbin sixh
  */
-public class NettyChannel implements com.sixh.spider.core.network.Channel {
+public class NettyChannel implements MChannel {
 
     private final Channel channel;
 
@@ -63,12 +65,12 @@ public class NettyChannel implements com.sixh.spider.core.network.Channel {
     }
 
     @Override
-    public ChannelHandler close() {
-        return new NettyChannelHandler(channel.close());
+    public MFuture close() {
+        return new NettyFuture(channel.close());
     }
 
     @Override
-    public ChannelHandler send(Object message) {
-        return new NettyChannelHandler(channel.writeAndFlush(message));
+    public MFuture send(Object message) {
+        return new NettyFuture(channel.writeAndFlush(message));
     }
 }

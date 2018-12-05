@@ -30,7 +30,6 @@ import com.sixh.spider.dubbo.DubboChannel;
 import com.sixh.spider.dubbo.rpc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -45,44 +44,48 @@ import java.io.InputStream;
  * @author chenbin sixh
  */
 public class DubboCodec implements Codec2 {
-
     private final Logger logger = LoggerFactory.getLogger(DubboCodec.class);
+
     /**
      * header length.
      */
     private static final int HEADER_LENGTH = 16;
+
     /**
      * magic header.
      */
     private static final short MAGIC = (short) 0xdabb;
+
     /**
      * The constant MAGIC_HIGH.
      */
     private static final byte MAGIC_HIGH = Bytes.short2bytes(MAGIC)[0];
+
     /**
      * The constant MAGIC_LOW.
      */
     private static final byte MAGIC_LOW = Bytes.short2bytes(MAGIC)[1];
+
     /**
      * The constant FLAG_REQUEST.
      */
     private static final byte FLAG_REQUEST = (byte) 0x80;
+
     /**
      * The constant FLAG_TWOWAY.
      */
     private static final byte FLAG_TWOWAY = (byte) 0x40;
+
     /**
      * The constant FLAG_EVENT.
      */
     private static final byte FLAG_EVENT = (byte) 0x20;
+
     /**
      * The constant SERIALIZATION_MASK.
      */
     private static final int SERIALIZATION_MASK = 0x1f;
-
-
     private RequestCodec requestCodec = new RequestCodec();
-
     private ResponseCodec responseCodec = new ResponseCodec();
 
     @Override
@@ -102,10 +105,10 @@ public class DubboCodec implements Codec2 {
 
         @Override
         public void encode(DubboChannel channel, ChannelBuffer buffer, Object message) throws IOException {
-            if (!(message instanceof Request)) {
+            if (!(message instanceof DubboRequest)) {
                 return;
             }
-            Request req = (Request) message;
+            DubboRequest req = (DubboRequest) message;
             Serialization serialization = new Hessian2Serialization();
 
             //header;
@@ -165,7 +168,7 @@ public class DubboCodec implements Codec2 {
          * @throws IOException the io exception
          */
         protected void encodeRequestData(DubboChannel channel, ObjectOutput out, Object data, String version) throws IOException {
-            RpcInvocation inv = (RpcInvocation) data;
+            DubboInvocation inv = (DubboInvocation) data;
             out.writeUTF(version);
             out.writeUTF(inv.getAttachment(Const.PATH_KEY));
             out.writeUTF(inv.getAttachment(Const.VERSION_KEY));
@@ -187,7 +190,7 @@ public class DubboCodec implements Codec2 {
     }
 
     /**
-     * The type Response codec.
+     * The type DubboResponse codec.
      */
     class ResponseCodec implements Codec2 {
 
@@ -212,16 +215,13 @@ public class DubboCodec implements Codec2 {
                 if (readable < HEADER_LENGTH) {
                     return DecodeResult.NEED_MORE_INPUT;
                 }
-
                 // get data length.
                 int len = Bytes.bytes2int(header, 12);
                 checkPayload(channel, len);
-
                 int tt = len + HEADER_LENGTH;
                 if (readable < tt) {
                     return DecodeResult.NEED_MORE_INPUT;
                 }
-
                 // limit input stream.
                 ChannelBufferInputStream is = new ChannelBufferInputStream(buffer, len);
                 try {
@@ -260,9 +260,9 @@ public class DubboCodec implements Codec2 {
         long id = Bytes.bytes2long(header, 4);
         if ((flag & FLAG_REQUEST) == 0) {
             // decode response.
-            Response res = new Response(id);
+            DubboResponse res = new DubboResponse(id);
             if ((flag & FLAG_EVENT) != 0) {
-                res.setEvent(Response.HEARTBEAT_EVENT);
+                res.setEvent(DubboResponse.HEARTBEAT_EVENT);
             }
             // get status.
             byte status = header[3];
@@ -270,14 +270,14 @@ public class DubboCodec implements Codec2 {
             try {
                 Serialization serialization = new Hessian2Serialization();
                 ObjectInput in = serialization.deserialize(null, is);
-                if (status == Response.OK) {
+                if (status == DubboResponse.OK) {
                     Object data;
                     if (res.isHeartbeat()) {
                         data = in.readObject();
                     } else if (res.isEvent()) {
                         data = in.readObject();
                     } else {
-                        data = ResponseType.decode(is);
+                        data = ResponseBody.decode(is);
                     }
                     res.setResult(data);
                 } else {
@@ -287,7 +287,7 @@ public class DubboCodec implements Codec2 {
                 if (logger.isWarnEnabled()) {
                     logger.warn("Decode response failed: " + t.getMessage(), t);
                 }
-                res.setStatus(Response.CLIENT_ERROR);
+                res.setStatus(DubboResponse.CLIENT_ERROR);
                 res.setErrorMessage(t.getMessage());
             }
             return res;

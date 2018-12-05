@@ -17,5 +17,5 @@ public interface Transport {
      * @param message the message
      * @return the channel handler
      */
-    ChannelHandler send(Object message);
+    MFuture send(Object message);
 }

@@ -16,7 +16,9 @@
  */
 package com.sixh.spider.dubbo.codec;
 
+import com.sixh.spider.common.Const;
 import com.sixh.spider.common.buffer.ChannelBuffer;
+import com.sixh.spider.common.exception.CodecException;
 import com.sixh.spider.dubbo.DubboChannel;
 
 import java.io.IOException;
@@ -60,16 +62,15 @@ public interface Codec2 {
      * @throws IOException the io exception
      */
     default void checkPayload(DubboChannel channel, long size) throws IOException {
-      /*  int payload = Const.DEFAULT_PAYLOAD;
+        int payload = Const.DEFAULT_PAYLOAD;
         if (channel != null && channel.getUrl() != null) {
             payload = channel.getUrl().getParameter(Const.PAYLOAD_KEY, Const.DEFAULT_PAYLOAD);
         }
         if (payload > 0 && size > payload) {
-            ExceedPayloadLimitException e = new ExceedPayloadLimitException("Data length too large: " + size + ", max payload: " + payload + ", channel: " + channel);
-            logger.error(e);
-            throw e;
-        }*/
+            throw new CodecException("Data length too large: " + size + ", max payload: " + payload + ", channel: " + channel);
+        }
     }
+
     /**
      * The enum Decode result.
      */

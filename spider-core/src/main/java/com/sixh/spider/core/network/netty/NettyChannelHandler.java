@@ -1,9 +1,9 @@
 package com.sixh.spider.core.network.netty;
 
-import com.sixh.spider.core.network.Channel;
-import com.sixh.spider.core.network.ChannelHandler;
+import com.sixh.spider.core.network.MChannel;
+import com.sixh.spider.core.network.MChannelHandler;
 import com.sixh.spider.core.network.ChannelHandlerListener;
-import com.sixh.spider.core.network.Future;
+import com.sixh.spider.core.network.MFuture;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
@@ -15,7 +15,7 @@ import io.netty.channel.ChannelFutureListener;
  *
  * @author chenbin sixh
  */
-public class NettyChannelHandler implements ChannelHandler {
+public class NettyChannelHandler implements MChannelHandler {
 
 
     private ChannelFuture channelFuture;
@@ -29,9 +29,8 @@ public class NettyChannelHandler implements ChannelHandler {
         this.channelFuture = future;
     }
 
-    @Override
     public void addListener(ChannelHandlerListener listener) {
-        channelFuture.addListener((ChannelFutureListener) future -> listener.operationComplete(new Future() {
+        channelFuture.addListener((ChannelFutureListener) future -> listener.operationComplete(new MFuture() {
             @Override
             public boolean isSuccessfully() {
                 return future.isSuccess();
@@ -43,9 +42,24 @@ public class NettyChannelHandler implements ChannelHandler {
             }
 
             @Override
-            public Channel getChannel() {
+            public MChannel getChannel() {
                 return new NettyChannel(future.channel());
             }
         }));
+    }
+
+    @Override
+    public void connected() {
+
+    }
+
+    @Override
+    public void disconnected() {
+
+    }
+
+    @Override
+    public void caught() {
+
     }
 }
