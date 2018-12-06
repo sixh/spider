@@ -16,11 +16,13 @@
  */
 package com.sixh.spider.core.network.aio;
 
+import com.sixh.spider.common.buffer.ChannelBuffer;
 import com.sixh.spider.core.network.MChannel;
 import com.sixh.spider.core.network.MFuture;
 
 import java.io.IOException;
 import java.net.SocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 
 /**
@@ -36,8 +38,16 @@ public class AioChannel implements MChannel {
 
     private AsynchronousSocketChannel channel;
 
+    private DefaultAioPipeline pipeline;
+
+    /**
+     * Instantiates a new Aio channel.
+     *
+     * @param channel the channel
+     */
     public AioChannel(AsynchronousSocketChannel channel) {
         this.channel = channel;
+        this.pipeline = new DefaultAioPipeline(this);
     }
 
     @Override
@@ -82,8 +92,24 @@ public class AioChannel implements MChannel {
         return null;
     }
 
+    /**
+     * Pipeline default aio pipeline.
+     *
+     * @return the default aio pipeline
+     */
+    public DefaultAioPipeline pipeline() {
+        return pipeline;
+    }
+
     @Override
     public MFuture send(Object message) {
-        return channel.write(message);
+        return this.pipeline.send(message);
+    }
+
+    public void write(Object message) {
+        if (message instanceof ChannelBuffer) {
+            ByteBuffer byteBuffer = (ByteBuffer) message;
+            channel.write(byteBuffer);
+        }
     }
 }

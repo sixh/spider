@@ -22,12 +22,10 @@ import com.sixh.spider.core.network.codec.CodecHandler;
 import com.sixh.spider.core.network.codec.CodecFactory;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBufAllocator;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
+import io.netty.channel.*;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.util.concurrent.TimeUnit;
 
@@ -73,7 +71,7 @@ public class NettyClient extends AbstractNetClient {
                 .channel(EpollSocketChannel.class);
         bootstrap.handler(new ChannelInitializer() {
             @Override
-            protected void initChannel(io.netty.channel.Channel ch) {
+            protected void initChannel(Channel ch) {
 
                 for (CodecHandler<ChannelHandler> codec : codec().getCodecs()) {
                     System.out.println("初始化到这里了.............."+codec.name());

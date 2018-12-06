@@ -18,10 +18,14 @@ package com.sixh.spider.core.network.aio;
 
 import com.sixh.spider.core.network.AbstractNetClient;
 import com.sixh.spider.core.network.MChannel;
+import com.sixh.spider.core.network.MFuture;
 import com.sixh.spider.core.network.codec.CodecFactory;
+import com.sixh.spider.core.network.codec.CodecHandler;
+import io.netty.channel.ChannelHandler;
 
 import java.io.IOException;
 import java.net.StandardSocketOptions;
+import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 
@@ -35,7 +39,9 @@ import java.nio.channels.CompletionHandler;
  */
 public class AioClient extends AbstractNetClient {
 
-    private AsynchronousSocketChannel client;
+    private AioClientHoder hoder;
+
+    private MChannel channel;
 
     /**
      * Instantiates a new Abstract net client.
@@ -48,35 +54,33 @@ public class AioClient extends AbstractNetClient {
 
     @Override
     protected MChannel getChannel() {
-        return new AioChannel(client);
+        return channel;
     }
 
     @Override
     protected void doOpen() {
-        try {
-            client = AsynchronousSocketChannel.open();
-            client.setOption(StandardSocketOptions.TCP_NODELAY, true);
-            client.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
-            client.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        hoder = new AioClientHoder();
+        hoder.option(StandardSocketOptions.TCP_NODELAY, true);
+        hoder.option(StandardSocketOptions.SO_KEEPALIVE, true);
+        hoder.option(StandardSocketOptions.SO_REUSEADDR, true);
+        hoder.handler(new AioInitChannelHandler() {
+            @Override
+            void initChannel(AioChannel channel) {
+                for (CodecHandler<AioHandler> codec : codec().getCodecs()) {
+                    System.out.println("初始化到这里了.............."+codec.name());
+                    channel.pipeline().addLast(codec.name(), codec.codec());
+                }
+            }
+        });
     }
 
     @Override
     protected void doConnection() {
         try {
-            client.connect(getAddress(), null, new CompletionHandler<Void, Object>() {
-                @Override
-                public void completed(Void result, Object attachment) {
-                    System.out.println("连接成功!");
-                }
-
-                @Override
-                public void failed(Throwable exc, Object attachment) {
-                    System.out.println("连接失败!");
-                }
-            });
+            MFuture connection = hoder.connection(getAddress());
+            if (connection.isSuccessfully()) {
+                channel = connection.getChannel();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

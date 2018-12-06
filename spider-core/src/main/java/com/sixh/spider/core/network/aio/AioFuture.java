@@ -28,9 +28,20 @@ import com.sixh.spider.core.network.MFuture;
  * @author chenbin sixh
  */
 public class AioFuture implements MFuture {
+    private AioChannel channel;
+
+    /**
+     * Instantiates a new Aio future.
+     *
+     * @param channel the channel
+     */
+    public AioFuture(AioChannel channel) {
+        this.channel = channel;
+    }
+
     @Override
     public boolean isSuccessfully() {
-        return false;
+        return channel.isConnected();
     }
 
     @Override
@@ -40,6 +51,6 @@ public class AioFuture implements MFuture {
 
     @Override
     public MChannel getChannel() {
-        return null;
+        return channel;
     }
 }

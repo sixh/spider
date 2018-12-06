@@ -24,15 +24,6 @@ public class NettyChannel implements MChannel {
     /**
      * Instantiates a new Netty channel.
      *
-     * @param channelHandlerContext the channel handler context
-     */
-    public NettyChannel(ChannelHandlerContext channelHandlerContext) {
-        channel = channelHandlerContext.channel();
-    }
-
-    /**
-     * Instantiates a new Netty channel.
-     *
      * @param channel the channel
      */
     public NettyChannel(Channel channel) {

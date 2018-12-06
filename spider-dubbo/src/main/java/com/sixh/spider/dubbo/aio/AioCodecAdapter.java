@@ -17,8 +17,22 @@
 package com.sixh.spider.dubbo.aio;
 
 import com.sixh.spider.common.URL;
+import com.sixh.spider.common.buffer.ByteBufferBackedChannelBuffer;
+import com.sixh.spider.common.buffer.ChannelBuffer;
+import com.sixh.spider.core.network.MChannel;
 import com.sixh.spider.core.network.MChannelHandler;
+import com.sixh.spider.core.network.aio.AioChannel;
+import com.sixh.spider.core.network.aio.AioDecode;
+import com.sixh.spider.core.network.aio.AioEncode;
+import com.sixh.spider.core.network.aio.AioHandlerContext;
+import com.sixh.spider.dubbo.DubboChannel;
 import com.sixh.spider.dubbo.codec.Codec2;
+import com.sixh.spider.dubbo.netty.NettyBackedChannelBuffer;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * AioCodecAdapter.
@@ -30,13 +44,21 @@ import com.sixh.spider.dubbo.codec.Codec2;
  */
 public class AioCodecAdapter {
 
-    private AioDecode decode = new AioDecode();
-    private AioEncode encode = new AioEncode();
+    private AioDecode decode = new InAioDecode();
+    private AioEncode encode = new InAioEncode();
     private Codec2 codec;
 
     private URL url;
 
     private MChannelHandler handler;
+
+    public AioDecode getDecode() {
+        return decode;
+    }
+
+    public AioEncode getEncode() {
+        return encode;
+    }
 
     /**
      * Instantiates a new Aio codec adapter.
@@ -51,11 +73,29 @@ public class AioCodecAdapter {
         this.handler = handler;
     }
 
-    public class AioEncode {
+    class InAioEncode extends AioEncode {
 
+        @Override
+        public void encode(AioHandlerContext ctx, MChannel channel, Object msg, ChannelBuffer buffer) {
+            AioChannel ch = ctx.channel();
+            try {
+                AioBackedChannelBuffer heapChannelBuffer = new AioBackedChannelBuffer(buffer);
+                codec.encode(new DubboChannel(ch, url), heapChannelBuffer, msg);
+//                buffer.flip();
+//                buffer.
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+//                NettyChannel.removeChannelIfDisconnected(ch);
+            }
+        }
     }
 
-    public class AioDecode {
+    class InAioDecode extends AioDecode {
 
+        @Override
+        protected Object decode(AioHandlerContext ctx, MChannel channel, ByteBuffer buffer) {
+            return null;
+        }
     }
 }

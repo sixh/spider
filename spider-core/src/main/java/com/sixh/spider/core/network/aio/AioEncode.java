@@ -16,9 +16,9 @@
  */
 package com.sixh.spider.core.network.aio;
 
+import com.sixh.spider.common.buffer.ChannelBuffer;
+import com.sixh.spider.common.buffer.ChannelBuffers;
 import com.sixh.spider.core.network.MChannel;
-
-import java.nio.ByteBuffer;
 
 /**
  * AioEncode.
@@ -28,14 +28,22 @@ import java.nio.ByteBuffer;
  *
  * @author chenbin sixh
  */
-public interface AioEncode {
+public abstract class AioEncode implements AioOutHandler {
 
     /**
      * Encode.
      *
+     * @param ctx     the ctx
      * @param channel the channel
      * @param object  the object
      * @param buffer  the buffer
      */
-    void encode(MChannel channel, Object object, ByteBuffer buffer);
+    public abstract void encode(AioHandlerContext ctx, MChannel channel, Object object, ChannelBuffer buffer);
+
+    @Override
+    public void write(AioHandlerContext ctx, Object msg) {
+        ChannelBuffer byteBuffer = ChannelBuffers.buffer(256);
+        encode(ctx, ctx.channel(), msg, byteBuffer);
+        ctx.write(byteBuffer);
+    }
 }

@@ -90,6 +90,7 @@ public class HeapChannelBuffer extends AbstractChannelBuffer {
         return 0;
     }
 
+
     @Override
     public byte getByte(int index) {
         return array[index];

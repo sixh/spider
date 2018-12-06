@@ -205,4 +205,5 @@ public class DynamicChannelBuffer extends AbstractChannelBuffer {
     public int arrayOffset() {
         return buffer.arrayOffset();
     }
+
 }

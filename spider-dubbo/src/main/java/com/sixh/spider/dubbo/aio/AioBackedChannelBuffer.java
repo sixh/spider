@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sixh.spider.dubbo.netty;
+package com.sixh.spider.dubbo.aio;
 
 
 import com.sixh.spider.common.buffer.ChannelBuffer;
 import com.sixh.spider.common.buffer.ChannelBufferFactory;
 import com.sixh.spider.common.buffer.ChannelBuffers;
-import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,11 +29,11 @@ import java.nio.ByteBuffer;
 /**
  * @author p
  */
-public class NettyBackedChannelBuffer implements ChannelBuffer {
+public class AioBackedChannelBuffer implements ChannelBuffer {
 
-    private ByteBuf buffer;
+    private ChannelBuffer buffer;
 
-    public NettyBackedChannelBuffer(ByteBuf buffer) {
+    public AioBackedChannelBuffer(ChannelBuffer buffer) {
         this.buffer = buffer;
     }
 
@@ -47,7 +46,7 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     @Override
     public ChannelBuffer copy(int index, int length) {
-        return new NettyBackedChannelBuffer(buffer.copy(index, length));
+        return new AioBackedChannelBuffer(buffer.copy(index, length));
     }
 
     @Override
@@ -130,7 +129,7 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     @Override
     public ByteBuffer toByteBuffer(int index, int length) {
-        return buffer.nioBuffer(index, length);
+        return buffer.toByteBuffer(index, length);
     }
 
 
@@ -150,7 +149,7 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
     public int arrayOffset() {
         return buffer.arrayOffset();
     }
-
+    
     // AbstractChannelBuffer
 
 
@@ -162,7 +161,7 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     @Override
     public ChannelBuffer copy() {
-        return new NettyBackedChannelBuffer(buffer.copy());
+        return new AioBackedChannelBuffer(buffer.copy());
     }
 
 
@@ -174,7 +173,7 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     @Override
     public void ensureWritableBytes(int writableBytes) {
-        buffer.ensureWritable(writableBytes);
+        buffer.ensureWritableBytes(writableBytes);
     }
 
 
@@ -216,7 +215,7 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     @Override
     public boolean readable() {
-        return buffer.isReadable();
+        return buffer.readable();
     }
 
 
@@ -282,7 +281,7 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     @Override
     public ChannelBuffer readBytes(int length) {
-        return new NettyBackedChannelBuffer(buffer.readBytes(length));
+        return new AioBackedChannelBuffer(buffer.readBytes(length));
     }
 
 
@@ -354,13 +353,13 @@ public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     @Override
     public ByteBuffer toByteBuffer() {
-        return buffer.nioBuffer();
+        return buffer.toByteBuffer();
     }
 
 
     @Override
     public boolean writable() {
-        return buffer.isWritable();
+        return buffer.writable();
     }
 
 

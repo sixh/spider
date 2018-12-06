@@ -16,26 +16,14 @@
  */
 package com.sixh.spider.core.network.aio;
 
-import com.sixh.spider.core.network.MChannel;
-
-import java.nio.ByteBuffer;
-
 /**
- * AioDecode.
+ * AioHandler.
  * <p>
  * <p>
- * 18-12-5下午4:45
+ * 18-12-6上午11:20
  *
  * @author chenbin sixh
  */
-public abstract class AioDecode implements AioHandler {
-    /**
-     * Decode object.
-     *
-     * @param ctx     the ctx
-     * @param channel the channel
-     * @param buffer  the buffer
-     * @return the object
-     */
-    protected abstract Object decode(AioHandlerContext ctx, MChannel channel, ByteBuffer buffer);
+public interface AioHandler {
+
 }
