@@ -67,7 +67,6 @@ public class AioClient extends AbstractNetClient {
             @Override
             void initChannel(AioChannel channel) {
                 for (CodecHandler<AioHandler> codec : codec().getCodecs()) {
-                    System.out.println("初始化到这里了.............."+codec.name());
                     channel.pipeline().addLast(codec.name(), codec.codec());
                 }
             }

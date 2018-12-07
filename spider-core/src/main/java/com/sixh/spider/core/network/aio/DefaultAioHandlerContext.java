@@ -21,6 +21,7 @@ import com.sixh.spider.core.network.MFuture;
 /**
  * DefaultAioHandlerContext.
  * <p>
+ *
  * <p>
  * 18-12-6上午11:42
  *
@@ -105,9 +106,9 @@ public class DefaultAioHandlerContext implements AioHandlerContext {
     }
 
     @Override
-    public MFuture write(Object messge) {
+    public MFuture write(Object message) {
         DefaultAioHandlerContext outbound = findContextOutbound();
-        return outbound.invokeWrite(messge);
+        return outbound.invokeWrite(message);
     }
 
     @Override

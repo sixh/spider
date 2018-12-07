@@ -22,7 +22,6 @@ import com.sixh.spider.core.network.MFuture;
 
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 
 /**
@@ -108,8 +107,8 @@ public class AioChannel implements MChannel {
 
     public void write(Object message) {
         if (message instanceof ChannelBuffer) {
-            ByteBuffer byteBuffer = (ByteBuffer) message;
-            channel.write(byteBuffer);
+            ChannelBuffer byteBuffer = (ChannelBuffer) message;
+            channel.write(byteBuffer.toByteBuffer());
         }
     }
 }

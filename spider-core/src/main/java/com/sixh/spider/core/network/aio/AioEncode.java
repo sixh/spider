@@ -42,7 +42,7 @@ public abstract class AioEncode implements AioOutHandler {
 
     @Override
     public void write(AioHandlerContext ctx, Object msg) {
-        ChannelBuffer byteBuffer = ChannelBuffers.buffer(256);
+        ChannelBuffer byteBuffer = ChannelBuffers.buffer(1024*1024*8);
         encode(ctx, ctx.channel(), msg, byteBuffer);
         ctx.write(byteBuffer);
     }
