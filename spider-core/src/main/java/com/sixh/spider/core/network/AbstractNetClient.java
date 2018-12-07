@@ -16,7 +16,9 @@
  */
 package com.sixh.spider.core.network;
 
+import com.sixh.spider.common.exception.RemotingException;
 import com.sixh.spider.core.network.codec.CodecFactory;
+import com.sixh.spider.core.network.netty.NettyFuture;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -24,6 +26,7 @@ import java.net.SocketAddress;
 /**
  * AbstractNetClient.
  * <p>
+ * abstract net client.
  * <p>
  * 18-11-30下午3:16
  *
@@ -97,13 +100,14 @@ public abstract class AbstractNetClient implements NetClient {
     }
 
     @Override
-    public MFuture send(Object message) {
-        if (message != null) {
-            if (usableness()) {
-                return getChannel().send(message);
-            }
+    public MFuture send(Object message) throws RemotingException {
+        if (message == null) {
+            throw new RemotingException("message 不能发送，传入的消息为空.");
         }
-        return null;
+        if (!usableness()) {
+
+        }
+        return getChannel().send(message);
     }
 
     /**
@@ -111,8 +115,8 @@ public abstract class AbstractNetClient implements NetClient {
      *
      * @return boolean boolean
      */
-    public boolean usableness() {
-        return getChannel().isOpened();
+    private boolean usableness() {
+        return getChannel().isConnected() && getChannel().isOpened();
     }
 
     /**

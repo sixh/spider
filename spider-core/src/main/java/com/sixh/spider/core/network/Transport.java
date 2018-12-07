@@ -1,5 +1,7 @@
 package com.sixh.spider.core.network;
 
+import com.sixh.spider.common.exception.RemotingException;
+
 /**
  * Transport.
  * <p>
@@ -16,6 +18,7 @@ public interface Transport {
      *
      * @param message the message
      * @return the channel handler
+     * @throws RemotingException 发送消息失败或消息格式不正确的时候.
      */
-    MFuture send(Object message);
+    MFuture send(Object message) throws RemotingException;
 }

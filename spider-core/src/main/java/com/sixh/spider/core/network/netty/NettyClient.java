@@ -74,7 +74,6 @@ public class NettyClient extends AbstractNetClient {
             protected void initChannel(Channel ch) {
 
                 for (CodecHandler<ChannelHandler> codec : codec().getCodecs()) {
-                    System.out.println("初始化到这里了.............."+codec.name());
                     ch.pipeline().addLast(codec.name(), codec.codec());
                 }
             }
@@ -84,11 +83,9 @@ public class NettyClient extends AbstractNetClient {
     @Override
     protected void doConnection() {
         ChannelFuture future = bootstrap.connect(getAddress());
-        //        if (connect.isDone()) {
         boolean ret = future.awaitUninterruptibly(3000, TimeUnit.MILLISECONDS);
-        if(ret && future.isSuccess()) {
+        if (ret && future.isSuccess()) {
             channel = future.channel();
         }
-//        }
     }
 }

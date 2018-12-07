@@ -1,10 +1,8 @@
 package com.sixh.spider.core.network.netty;
 
-import com.sixh.spider.core.network.MChannelHandler;
 import com.sixh.spider.core.network.MChannel;
 import com.sixh.spider.core.network.MFuture;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 
 import java.net.SocketAddress;
 

@@ -16,6 +16,7 @@
  */
 package com.sixh.spider.dubbo;
 
+import com.sixh.spider.common.exception.RemotingException;
 import com.sixh.spider.core.network.aio.AioClient;
 import com.sixh.spider.core.network.netty.NettyClient;
 import com.sixh.spider.dubbo.aio.AioDubboCodecFactory;
@@ -35,7 +36,7 @@ import java.util.Map;
  * @author chenbin sixh
  */
 public class Main2 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RemotingException {
         AioClient client = new AioClient(new AioDubboCodecFactory());
         client.setAddress("192.168.1.139");
         client.setPort(20881);

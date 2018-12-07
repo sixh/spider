@@ -16,6 +16,7 @@
  */
 package com.sixh.spider.dubbo;
 
+import com.sixh.spider.common.exception.RemotingException;
 import com.sixh.spider.core.network.netty.NettyClient;
 import com.sixh.spider.dubbo.netty.NettyDubboCodecFactory;
 import com.sixh.spider.dubbo.rpc.DubboInvocation;
@@ -33,7 +34,7 @@ import java.util.Map;
  * @author chenbin sixh
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RemotingException {
         NettyClient client = new NettyClient(new NettyDubboCodecFactory());
         client.setAddress("192.168.1.139");
         client.setPort(20881);
