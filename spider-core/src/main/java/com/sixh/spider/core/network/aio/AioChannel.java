@@ -22,7 +22,9 @@ import com.sixh.spider.core.network.MFuture;
 
 import java.io.IOException;
 import java.net.SocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
 
 /**
  * AioChannel.
@@ -105,10 +107,42 @@ public class AioChannel implements MChannel {
         return this.pipeline.send(message);
     }
 
-    public void write(Object message) {
+    /**
+     * Write.
+     *
+     * @param message the message
+     */
+    void write(Object message) {
         if (message instanceof ChannelBuffer) {
             ChannelBuffer byteBuffer = (ChannelBuffer) message;
             channel.write(byteBuffer.toByteBuffer());
+            channel.write(byteBuffer.toByteBuffer(), null, new CompletionHandler<Integer, Object>() {
+
+                @Override
+                public void completed(Integer result, Object attachment) {
+                    System.out.println(result);
+                }
+
+                @Override
+                public void failed(Throwable exc, Object attachment) {
+
+                }
+            });
+            ByteBuffer allocate = ByteBuffer.allocate(1024 * 1024 * 8);
+            channel.read(allocate, null, new CompletionHandler<Integer, Object>() {
+                @Override
+                public void completed(Integer result, Object attachment) {
+                    if (result > 0) {
+                        allocate.flip();
+                        System.out.println("读到数据了");
+                    }
+                }
+
+                @Override
+                public void failed(Throwable exc, Object attachment) {
+
+                }
+            });
         }
     }
 }
