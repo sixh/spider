@@ -105,7 +105,7 @@ public abstract class AbstractNetClient implements NetClient {
             throw new RemotingException("message 不能发送，传入的消息为空.");
         }
         if (!usableness()) {
-
+            throw new RemotingException("channel close");
         }
         return getChannel().send(message);
     }

@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 /**
  * AioDecode.
  * <p>
+ * aio调用的解码接口实现.
  * <p>
  * 18-12-5下午4:45
  *

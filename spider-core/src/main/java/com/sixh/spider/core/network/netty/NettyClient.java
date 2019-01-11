@@ -18,14 +18,13 @@ package com.sixh.spider.core.network.netty;
 
 import com.sixh.spider.core.network.AbstractNetClient;
 import com.sixh.spider.core.network.MChannel;
-import com.sixh.spider.core.network.codec.CodecHandler;
 import com.sixh.spider.core.network.codec.CodecFactory;
+import com.sixh.spider.core.network.codec.CodecHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.util.concurrent.TimeUnit;
 
